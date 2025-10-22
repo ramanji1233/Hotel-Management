@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SUPREME HOTEL</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* General Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+
+    body {
+      line-height: 1.6;
+      color: #333;
+      background-color: #f9f9f9;
+    }
+
+    /* Header Styles */
+    .hero-header {
+      background-color: #041E42;
+      color: white;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .hero-text h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    nav ul {
+      display: flex;
+      justify-content: center;
+      list-style: none;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+
+    nav a:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Section Styles */
+    .page-section {
+      padding: 3rem 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 2rem;
+      color: #000000;
+      font-size: 2rem;
+    }
+
+    /* Facilities Section */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .card h3 {
+      padding: 1rem 1rem 0.5rem;
+      color: #132172;
+    }
+
+    .card p {
+      padding: 0 1rem 1rem;
+      color: #3d3d3d;
+    }
+
+    /* Rooms Section */
+    .filters {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin: 1.5rem 0;
+      flex-wrap: wrap;
+    }
+
+    .filters select {
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+      background: white;
+      cursor: pointer;
+    }
+
+    .room-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .room-card {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .room-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .room-info {
+      padding: 1.5rem;
+    }
+
+    .room-info h3 {
+      color: #000000;
+      margin-bottom: 0.5rem;
+    }
+
+    .room-info p {
+      color: #666;
+      margin-bottom: 1rem;
+    }
+
+    .cost {
+      font-weight: bold;
+      color: #0f1b4b;
+      font-size: 1.2rem;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    .availability {
+      display: inline-block;
+      padding: 0.3rem 0.8rem;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      background: #e8f5e9;
+      color: #0b0c3f;
+      margin-bottom: 1rem;
+    }
+
+    .availability.sold {
+      background: #ffebee;
+      color: #8f8e8e;
+    }
+
+    .room-card button {
+      width: 100%;
+      padding: 0.8rem;
+      background: #4c81b3;
+      color: rgb(255, 255, 255);
+      border: none;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .room-card button:hover {
+      background: #051542;
+    }
+
+    .room-card button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    /* Menu Section */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .menu-card {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .menu-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .menu-info {
+      padding: 1.5rem;
+    }
+
+    .menu-info h3 {
+      color: #11143d;
+      margin-bottom: 0.5rem;
+    }
+
+    .menu-info p {
+      color: #272727;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+    }
+
+    .price {
+      font-weight: bold;
+      color: #14154b;
+      font-size: 1.2rem;
+      display: block;
+      margin-bottom: 1rem;
+    }
+
+    .menu-card button {
+      width: 100%;
+      padding: 0.8rem;
+      background: #4c81b3;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .menu-card button:hover {
+      background: #051542;
+    }
+
+    /* Booking Form */
+    #booking {
+      background: #f0f8f5;
+    }
+
+    #bookingForm {
+      max-width: 600px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    #bookingForm input,
+    #bookingForm select {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    #bookingForm button {
+      grid-column: span 2;
+      padding: 1rem;
+      background: #162f4e;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    
+
+    #booking-status {
+      grid-column: span 2;
+      margin-top: 1rem;
+    }
+
+    .success-message {
+      background: #e8f5e9;
+      padding: 1rem;
+      border-radius: 4px;
+      color: #142146;
+    }
+
+    /* Booked Members */
+    .booked-members {
+      margin-top: 3rem;
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .booked-members h3 {
+      text-align: left;
+      margin-bottom: 1rem;
+      color: #132452;
+    }
+
+    #members-list {
+      list-style: none;
+    }
+
+    #members-list li {
+      padding: 0.8rem 0;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    #members-list li:last-child {
+      border-bottom: none;
+    }
+
+    /* Reviews Section */
+    #reviewForm {
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    #reviewForm input,
+    #reviewForm textarea,
+    #reviewForm select {
+      width: 100%;
+      padding: 0.8rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    #reviewForm textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .rating {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    #reviewForm button {
+      width: 100%;
+      padding: 1rem;
+      background: #11244d;
+     
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .review-list {
+      margin-top: 2rem;
+    }
+
+    .review-item {
+      background: white;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .review-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .review-header h4 {
+      color: #1d658f;
+    }
+
+    .rating {
+      color: #000000;
+    }
+
+    .date {
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    /* Footer */
+    footer {
+      background: #11244d;
+      color: white;
+      padding: 2rem 1.5rem;
+      text-align: center;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      text-align: left;
+    }
+
+    .contact-info p {
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .social-links {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .social-links a {
+      color: white;
+      margin-right: 1rem;
+      font-size: 1.5rem;
+      transition: opacity 0.3s;
+    }
+
+    .social-links a:hover {
+      opacity: 0.8;
+    }
+
+    .copyright {
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    /* Shopping Cart Styles */
+    .cart-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+    }
+
+    .cart-icon {
+      background: #16346d;
+      color: white;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      position: relative;
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: #ff5722;
+      color: white;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      font-size: 0.8rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .cart-dropdown {
+      position: absolute;
+      top: 60px;
+      right: 0;
+      width: 300px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      padding: 1rem;
+      display: none;
+    }
+
+    .cart-dropdown.active {
+      display: block;
+    }
+
+    .cart-items {
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .cart-total {
+      font-weight: bold;
+      margin: 1rem 0;
+      text-align: right;
+    }
+
+    .checkout-btn {
+      width: 100%;
+      padding: 0.8rem;
+      background: #1e4374;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    /* Car Parking Section */
+    .parking-section {
+      background: #f0f8f5;
+    }
+
+    .parking-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .parking-card {
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .parking-card h3 {
+      color: #122542;
+      margin-bottom: 1rem;
+    }
+
+    .parking-card p {
+      margin-bottom: 1rem;
+      color: #666;
+    }
+
+    .parking-features {
+      margin-bottom: 1rem;
+    }
+
+    .parking-features p {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .parking-price {
+      font-weight: bold;
+      color: #0c1a33;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+
+    .parking-form {
+      margin-top: 1rem;
+    }
+
+    .parking-form input {
+      width: 100%;
+      padding: 0.8rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    .parking-btn {
+      width: 100%;
+      padding: 0.8rem;
+      background: #162f4e;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      #bookingForm {
+        grid-template-columns: 1fr;
+      }
+
+      #bookingForm button {
+        grid-column: span 1;
+      }
+
+      .footer-content {
+        grid-template-columns: 1fr;
+      }
+
+      .cart-dropdown {
+        width: 280px;
+        right: -50px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a href="login.html">Login</a>
+  <!-- Shopping Cart Icon -->
+  <div class="cart-container">
+    <div class="cart-icon" onclick="toggleCart()">
+      <i class="fas fa-shopping-cart"></i>
+      <span class="cart-count" id="cartCount">0</span>
+    </div>
+    <div class="cart-dropdown" id="cartDropdown">
+      <h3>Your Order</h3>
+      <div class="cart-items" id="cartItems">
+        <!-- Cart items will be added here dynamically -->
+      </div>
+      <div class="cart-total">
+        Total: ₹<span id="cartTotal">0</span>
+      </div>
+      <button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+    </div>
+  </div>
+
+  <header class="hero-header">
+    <div class="hero-text">
+      <h1>SUPREME HOTEL</h1>
+      <nav>
+        <ul>
+          <li><a href="#facilities">Facilities</a></li>
+          <li><a href="#rooms">Rooms</a></li>
+          <li><a href="#menu">Menu</a></li>
+          <li><a href="#parking">Parking</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Facilities Section -->
+  <section id="facilities" class="facilities page-section">
+    <h2>Our Facilities</h2>
+    <div class="cards">
+      <div class="card">
+        <img src="https://ajgrandelite.com/wp-content/uploads/2024/04/MPP_0120.jpg" alt="Rooms">
+        <h3>Luxury Rooms</h3>
+        <p>Experience comfort like never before.</p>
+      </div>
+      <div class="card">
+        <img src="https://zeroinchinteriorsltd.com/wp-content/uploads/2023/09/The-primary-dining-area-of-a-modern-and-minimalistic-Italian-Fine-Dining-restaurant-adorned-in-raspberry-tones.-2.jpg" alt="Dining">
+        <h3>Dining hall</h3>
+        <p>Enjoy delicious gourmet meals.</p>
+      </div>
+      <div class="card">
+        <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/16/2e/29/6e/elite-byblos-hotel.jpg?w=700&h=-1&s=1" alt="Pool">
+        <h3>Infinity Pool</h3>
+        <p>Relax with a view.</p>
+      </div>
+      <div class="card">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTXChnc1k-QLECCWTqsvs2E3_lagH7jhruyw&s" alt="food">
+        <h3>Food & Beverages</h3>
+        <p>Unwind with our food treatments.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Rooms Section -->
+  <section id="rooms" class="room-listing page-section">
+    <h2>Available Rooms</h2>
+    
+    <!-- Filter Section -->
+    <div class="filters">
+      <select id="roomTypeFilter" onchange="filterRooms()">
+        <option value="all">All Types</option>
+        <option value="Deluxe">Deluxe</option>
+        <option value="Suite">Suite</option>
+        <option value="Family">Family</option>
+      </select>
+      <select id="priceFilter" onchange="filterRooms()">
+        <option value="all">All Prices</option>
+        <option value="under400">Under ₹400</option>
+        <option value="under500">Under ₹500</option>
+        <option value="above500">Above ₹500</option>
+      </select>
+    </div>
+
+    <div class="room-cards">
+      <div class="room-card" data-type="Deluxe" data-price="499">
+        <img src="https://www.eliteworldhotels.com.tr/Upload/638385079092644033_a616d893.jpg" alt="Room 101">
+        <div class="room-info">
+          <h3>Room NO:101-116</h3>
+          <p>Deluxe Room</p>
+          <span class="cost">₹499/night</span>
+          <span class="availability">Available</span>
+          <button onclick="bookRoom('101')">Book Now</button>
+        </div>
+      </div>
+      <div class="room-card" data-type="Suite" data-price="399">
+        <img src="https://diamondhotel.com/wp-content/uploads/2024/02/premier-executive3.jpg" alt="Room 205">
+        <div class="room-info">
+          <h3>Room NO:205-212</h3>
+          <p>Executive Suite</p>
+          <span class="cost">₹399/night</span>
+          <span class="availability">Available</span>
+          <button onclick="bookRoom('205')">Book Now</button>
+        </div>
+      </div>
+      <div class="room-card" data-type="Family" data-price="999">
+        <img src="https://images.getaroom-cdn.com/image/upload/s--ABhEhLmH--/c_limit,e_improve,fl_lossy.immutable_cache,h_460,q_auto:good,w_460/v1749920020/63f60785a0e6c36eb1056ba3cbc6c4ca9cc390df?_a=BACAEuDL&atc=e7cd1cfa" alt="Room 420">
+        <div class="room-info">
+          <h3>Room NO:420</h3>
+          <p>Supreme Room</p>
+          <span class="cost">₹999/night</span>
+          <span class="availability">Available</span>
+          <button onclick="bookRoom('420')">Book Now</button>
+        </div>
+      </div>
+      
+      </div>
+    </div>
+  </section>
+
+  <!-- Menu Section -->
+  <section id="menu" class="menu-section page-section">
+    <h2>Our Menu</h2>
+    <div class="menu-grid">
+      <div class="menu-card">
+        <img src="https://api.photon.aremedia.net.au/wp-content/uploads/sites/4/2021/02/03/32243/HL1169B06d-2.jpg?fit=900%2C750" alt="Burger">
+        <div class="menu-info">
+          <h3>Classic Chicken Burger</h3>
+          <p>Juicy beef patty with fresh lettuce, tomato, and cheese.</p>
+          <span class="price">₹99</span>
+          <button onclick="orderFood('Classic Chicken Burger', 99)">Order Now</button>
+        </div>
+      </div>
+      <div class="menu-card">
+        <img src="https://safrescobaldistatic.blob.core.windows.net/media/2022/11/PIZZA-MARGHERITA.jpg" alt="Pizza">
+        <div class="menu-info">
+          <h3>Panner Pizza</h3>
+          <p>Fresh mozzarella, tomatoes, basil & olive oil.</p>
+          <span class="price">₹149</span>
+          <button onclick="orderFood('Margherita Pizza', 149)">Order Now</button>
+        </div>
+      </div>
+      <div class="menu-card">
+        <img src="https://thescranline.com/wp-content/uploads/2023/05/CHICKEN-ALFREDO-S-01.jpg" alt="Pasta">
+        <div class="menu-info">
+          <h3>Creamy Alfredo Pasta</h3>
+          <p>Penne tossed in garlic Alfredo sauce and herbs.</p>
+          <span class="price">₹249</span>
+          <button onclick="orderFood('Creamy Alfredo Pasta', 249)">Order Now</button>
+        </div>
+      </div>
+      <div class="menu-card">
+        <img src="https://www.foodandhome.co.za/wp-content/uploads/2016/09/death-by-chocolate-milkshake-recipe-1-e1705393684672.jpg" alt="Milkshake">
+        <div class="menu-info">
+          <h3>Chocolate Milkshake</h3>
+          <p>Rich chocolate shake with ice cream.</p>
+          <span class="price">₹99</span>
+          <button onclick="orderFood('Chocolate Milkshake', 99)">Order Now</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Car Parking Section -->
+  <section id="parking" class="parking-section page-section">
+    <h2>Car Parking Facilities</h2>
+    <div class="parking-options">
+      <div class="parking-card">
+        <h3>Standard Parking</h3>
+        <p>Secure outdoor parking space with 24/7 surveillance</p>
+        <div class="parking-features">
+          <p><i class="fas fa-car"></i> Suitable for all vehicle types</p>
+          <p><i class="fas fa-shield-alt"></i> Security monitored</p>
+        </div>
+        <div class="parking-price">₹50 per day</div>
+        <div class="parking-form">
+          <input type="text" id="standard-vehicle" placeholder="Vehicle Number">
+          <input type="date" id="standard-date">
+          <button class="parking-btn" onclick="bookParking('standard')">Book Parking</button>
+        </div>
+      </div>
+      
+      <div class="parking-card">
+        <h3>Covered Parking</h3>
+        <p>Protected covered parking to shield your vehicle from weather</p>
+        <div class="parking-features">
+          <p><i class="fas fa-umbrella"></i> Weather protection</p>
+          <p><i class="fas fa-lock"></i> Extra security</p>
+        </div>
+        <div class="parking-price">₹70 per day</div>
+        <div class="parking-form">
+          <input type="text" id="covered-vehicle" placeholder="Vehicle Number">
+          <input type="date" id="covered-date">
+          <button class="parking-btn" onclick="bookParking('covered')">Book Parking</button>
+        </div>
+      </div>
+      
+      <div class="parking-card">
+        <h3>Valet Parking</h3>
+        <p>Premium valet service with professional drivers</p>
+        <div class="parking-features">
+          <p><i class="fas fa-user-tie"></i> Professional service</p>
+          <p><i class="fas fa-clock"></i> Available 24/7</p>
+        </div>
+        <div class="parking-price">₹100 per day</div>
+        <div class="parking-form">
+          <input type="text" id="valet-vehicle" placeholder="Vehicle Number">
+          <input type="date" id="valet-date">
+          <button class="parking-btn" onclick="bookParking('valet')">Book Parking</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Booking Section -->
+  <section id="booking" class="booking page-section">
+    <h2>Book Your Stay</h2>
+    <form id="bookingForm" onsubmit="return submitBooking(event)">
+      <input type="text" id="name" placeholder="Your Name" required />
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="date" id="checkin" required />
+      <input type="date" id="checkout" required />
+      <select id="roomType" required>
+        <option value="">Select Room Type</option>
+        <option value="Deluxe">Deluxe Room</option>
+        <option value="Suite">Executive Suite</option>
+        <option value="Supreme">Supreme Room</option>
+      </select>
+      <button type="submit">Book Now</button>
+    </form>
+    <div id="booking-status"></div>
+
+    <!-- Booked Members List -->
+    <div class="booked-members">
+      <h3>Recent Bookings</h3>
+      <ul id="members-list"></ul>
+    </div>
+  </section>
+
+  <!-- Review Section -->
+  <section class="reviews page-section">
+    <h2>Customer Reviews</h2>
+    <form id="reviewForm" onsubmit="return submitReview(event)">
+      <input type="text" id="reviewer-name" placeholder="Your Name" required />
+      <textarea id="review-message" placeholder="Write your review..." required></textarea>
+      <div class="rating">
+        <span>Rating:</span>
+        <select id="review-rating" required>
+          <option value="5">★★★★★</option>
+          <option value="4">★★★★☆</option>
+          <option value="3">★★★☆☆</option>
+          <option value="2">★★☆☆☆</option>
+          <option value="1">★☆☆☆☆</option>
+        </select>
+      </div>
+      <button type="submit">Submit Review</button>
+    </form>
+    <div class="review-list" id="review-list"></div>
+  </section>
+
+  <footer id="contact">
+    <div class="footer-content">
+      <div class="contact-info">
+        <h3>Contact Us</h3>
+        <p><i class="fas fa-phone"></i> +91-9290842301</p>
+        <p><i class="fas fa-envelope"></i> contact@Supremehotel.com</p>
+        <p><i class="fas fa-map-marker-alt"></i> 1-2-3 Supreme Street,New Town,Sydney</p>
+        <p><i class="fas fa-car"></i> Parking available 24/7</p>
+      </div>
+      
+    </div>
+    <p class="copyright">&copy; 2025 Supreme Hotel. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Food Order Function
+    function orderFood(itemName, price) {
+      const quantity = parseInt(prompt(`How many ${itemName} would you like to order?`, "1")) || 0;
+      
+      if (quantity > 0) {
+        addToCart(itemName, price, quantity);
+      } else {
+        alert('Please enter a valid quantity');
+      }
+    }
+
+    // Room Booking Function
+    function bookRoom(roomNumber) {
+      document.getElementById('roomType').value = 
+        roomNumber === '101' ? 'Deluxe' : 
+        roomNumber === '102' ? 'Deluxe' :
+        roomNumber === '205' ? 'Suite' : 'Family';
+      document.getElementById('booking').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Submit Booking Form
+    function submitBooking(event) {
+      event.preventDefault();
+      
+      const bookingData = {
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        checkin: document.getElementById('checkin').value,
+        checkout: document.getElementById('checkout').value,
+        roomType: document.getElementById('roomType').value,
+        timestamp: new Date().toISOString()
+      };
+      
+      // Save to localStorage for demonstration
+      const bookings = JSON.parse(localStorage.getItem('roomBookings') || '[]');
+      bookings.push(bookingData);
+      localStorage.setItem('roomBookings', JSON.stringify(bookings));
+      
+      // Update UI
+      document.getElementById('booking-status').innerHTML = `
+        <div class="success-message">
+          <p>Thank you, ${bookingData.name}! Your booking for a ${bookingData.roomType} room has been received.</p>
+          <p>Check-in: ${bookingData.checkin}</p>
+          <p>Check-out: ${bookingData.checkout}</p>
+        </div>
+      `;
+      
+      // Update bookings list
+      updateBookingsList();
+      document.getElementById('bookingForm').reset();
+    }
+
+    // Update Bookings List
+    function updateBookingsList() {
+      const bookings = JSON.parse(localStorage.getItem('roomBookings') || '[]');
+      const list = document.getElementById('members-list');
+      list.innerHTML = '';
+      
+      // Show only last 5 bookings
+      const recentBookings = bookings.slice(-5).reverse();
+      
+      recentBookings.forEach(booking => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <strong>${booking.name}</strong> - ${booking.roomType} Room
+          <span>${booking.checkin} to ${booking.checkout}</span>
+        `;
+        list.appendChild(li);
+      });
+    }
+
+    // Submit Review
+    function submitReview(event) {
+      event.preventDefault();
+      
+      const reviewData = {
+        name: document.getElementById('reviewer-name').value,
+        message: document.getElementById('review-message').value,
+        rating: document.getElementById('review-rating').value,
+        date: new Date().toLocaleDateString()
+      };
+      
+      // Save to localStorage
+      const reviews = JSON.parse(localStorage.getItem('hotelReviews') || '[]');
+      reviews.push(reviewData);
+      localStorage.setItem('hotelReviews', JSON.stringify(reviews));
+      
+      // Update UI
+      updateReviewsList();
+      document.getElementById('reviewForm').reset();
+      alert('Thank you for your review!');
+    }
+
+    // Update Reviews List
+    function updateReviewsList() {
+      const reviews = JSON.parse(localStorage.getItem('hotelReviews') || '[]');
+      const list = document.getElementById('review-list');
+      list.innerHTML = '';
+      
+      // Show only last 3 reviews
+      const recentReviews = reviews.slice(-3).reverse();
+      
+      recentReviews.forEach(review => {
+        const div = document.createElement('div');
+        div.className = 'review-item';
+        div.innerHTML = `
+          <div class="review-header">
+            <h4>${review.name}</h4>
+            <div class="rating">${'★'.repeat(review.rating)}${'☆'.repeat(5-review.rating)}</div>
+            <span class="date">${review.date}</span>
+          </div>
+          <p>${review.message}</p>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    // Filter Rooms
+    function filterRooms() {
+      const typeFilter = document.getElementById('roomTypeFilter').value;
+      const priceFilter = document.getElementById('priceFilter').value;
+      const rooms = document.querySelectorAll('.room-card');
+      
+      rooms.forEach(room => {
+        const type = room.getAttribute('data-type');
+        const price = parseInt(room.getAttribute('data-price'));
+        
+        let showRoom = true;
+        
+        // Apply type filter
+        if (typeFilter !== 'all' && type !== typeFilter) {
+          showRoom = false;
+        }
+        
+        // Apply price filter
+        if (priceFilter !== 'all') {
+          if (priceFilter === 'under400' && price >= 400) {
+            showRoom = false;
+          } else if (priceFilter === 'under500' && price >= 500) {
+            showRoom = false;
+          } else if (priceFilter === 'above500' && price < 500) {
+            showRoom = false;
+          }
+        }
+        
+        room.style.display = showRoom ? 'block' : 'none';
+      });
+    }
+
+    // Shopping Cart Functions
+    let cart = JSON.parse(localStorage.getItem('hotelCart')) || [];
+
+    function updateCartDisplay() {
+      const cartItems = document.getElementById('cartItems');
+      const cartCount = document.getElementById('cartCount');
+      const cartTotal = document.getElementById('cartTotal');
+      
+      cartItems.innerHTML = '';
+      let total = 0;
+      
+      if (cart.length === 0) {
+        cartItems.innerHTML = '<p>Your cart is empty</p>';
+      } else {
+        cart.forEach(item => {
+          const cartItem = document.createElement('div');
+          cartItem.className = 'cart-item';
+          cartItem.innerHTML = `
+            <span>${item.quantity}x ${item.name}</span>
+            <span>₹${item.price * item.quantity}</span>
+          `;
+          cartItems.appendChild(cartItem);
+          total += item.price * item.quantity;
+        });
+      }
+      
+      cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+      cartTotal.textContent = total;
+      localStorage.setItem('hotelCart', JSON.stringify(cart));
+    }
+
+    function toggleCart() {
+      document.getElementById('cartDropdown').classList.toggle('active');
+    }
+
+    function addToCart(name, price, quantity) {
+      const existingItem = cart.find(item => item.name === name);
+      
+      if (existingItem) {
+        existingItem.quantity += quantity;
+      } else {
+        cart.push({ name, price, quantity });
+      }
+      
+      updateCartDisplay();
+      toggleCart();
+    }
+
+    function checkout() {
+      if (cart.length === 0) {
+        alert('Your cart is empty!');
+        return;
+      }
+      
+      const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      const orderDetails = cart.map(item => 
+        `${item.quantity}x ${item.name} - ₹${item.price * item.quantity}`
+      ).join('\n');
+      
+      if (confirm(`Confirm your order:\n\n${orderDetails}\n\nTotal: ₹${total}\n\nProceed to payment?`)) {
+        alert('Thank you for your order! Your food will be prepared shortly.');
+        cart = [];
+        updateCartDisplay();
+      }
+    }
+
+    // Car Parking Functions
+    function bookParking(type) {
+      const vehicleId = `${type}-vehicle`;
+      const dateId = `${type}-date`;
+      
+      const vehicleNumber = document.getElementById(vehicleId).value;
+      const date = document.getElementById(dateId).value;
+      
+      if (!vehicleNumber || !date) {
+        alert('Please enter both vehicle number and date');
+        return;
+      }
+      
+      const prices = {
+        'standard': 50,
+        'covered': 70,
+        'valet': 100
+      };
+      
+      const typeNames = {
+        'standard': 'Standard Parking',
+        'covered': 'Covered Parking',
+        'valet': 'Valet Parking'
+      };
+      
+      if (confirm(`Confirm booking for ${typeNames[type]}?\n\nVehicle: ${vehicleNumber}\nDate: ${date}\nPrice: ₹${prices[type]}`)) {
+        alert(`Your ${typeNames[type]} has been booked successfully!`);
+        // Save to localStorage
+        const parkingBookings = JSON.parse(localStorage.getItem('parkingBookings') || '[]');
+        parkingBookings.push({
+          type: typeNames[type],
+          vehicle: vehicleNumber,
+          date: date,
+          price: prices[type],
+          timestamp: new Date().toISOString()
+        });
+        localStorage.setItem('parkingBookings', JSON.stringify(parkingBookings));
+        
+        // Clear form
+        document.getElementById(vehicleId).value = '';
+        document.getElementById(dateId).value = '';
+      }
+    }
+
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', function() {
+      updateBookingsList();
+      updateReviewsList();
+      updateCartDisplay();
+      
+      // Close cart when clicking outside
+      document.addEventListener('click', function(e) {
+        if (!e.target.closest('.cart-container')) {
+          document.getElementById('cartDropdown').classList.remove('active');
+        }
+      });
+    });
+  </script>
+  <nav>
+  <ul>
+    <li><a href="#facilities">Facilities</a></li>
+    <li><a href="#rooms">Rooms</a></li>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#parking">Parking</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="login.html">Login</a></li> <!-- ✅ Added Login link -->
+  </ul>
+</nav>
+
+</body>
+</html>
