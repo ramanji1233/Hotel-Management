@@ -1,0 +1,40 @@
+/* Nearby Hotels modal and button styles */
+.nearby-btn {
+  position: fixed;
+  right: 20px;
+  bottom: 90px;
+  background: linear-gradient(135deg,#041E42,#4c81b3);
+  color: #fff;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(4,30,66,0.25);
+  z-index: 99998;
+}
+
+.nearby-modal {
+  position: fixed;
+  right: 20px;
+  bottom: 140px;
+  width: 360px;
+  max-height: 70vh;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 18px 40px rgba(0,0,0,0.2);
+  overflow: auto;
+  z-index: 99999;
+  display: none;
+  flex-direction: column;
+}
+.nearby-modal.open{display:flex}
+.nearby-header{padding:12px 14px;background:linear-gradient(90deg,#041E42,#4c81b3);color:#fff;display:flex;justify-content:space-between;align-items:center}
+.nearby-body{padding:12px}
+.nearby-item{padding:10px;border-radius:8px;border:1px solid #f0f0f0;margin-bottom:8px;background:#fafafa}
+.nearby-item h4{margin:0 0 6px 0;font-size:14px}
+.nearby-item p{margin:0;font-size:13px;color:#444}
+.nearby-actions{margin-top:8px;display:flex;gap:8px}
+.nearby-actions a{padding:6px 8px;border-radius:6px;text-decoration:none;font-size:13px}
+.nearby-actions a.navigate{background:#4c81b3;color:#fff}
+.nearby-actions a.call{background:#e8e8e8;color:#111}
+.nearby-note{font-size:12px;color:#666;padding:8px 12px;border-top:1px solid #f3f3f3;background:#fff}
