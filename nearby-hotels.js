@@ -148,4 +148,33 @@
 
   window.NearbyHotels = { init };
 
+  // Open Google Maps search for hotels centered on user's current location
+  async function openMapsForHotels(){
+    if(!navigator.geolocation){ alert('Geolocation is not supported by your browser.'); return; }
+    try{
+      const pos = await new Promise((resolve, reject) => navigator.geolocation.getCurrentPosition(resolve, reject, {timeout:15000}));
+      const lat = pos.coords.latitude; const lon = pos.coords.longitude;
+      const zoom = 14; // reasonable default
+      const mapsUrl = `https://www.google.com/maps/search/hotels/@${lat},${lon},${zoom}z`;
+      window.open(mapsUrl, '_blank');
+    }catch(err){
+      alert('Unable to get location: '+(err.message || 'permission denied'));
+    }
+  }
+
+  // wire optional header button if present
+  function wireHeaderButton(){
+    const btn = document.getElementById('findNearbyInline');
+    if(btn){
+      btn.addEventListener('click', (e)=>{ e.preventDefault(); openMapsForHotels(); });
+    }
+  }
+
+  // attempt to wire after DOM ready
+  if(document.readyState==='complete' || document.readyState==='interactive'){
+    setTimeout(wireHeaderButton,300);
+  } else {
+    window.addEventListener('DOMContentLoaded', ()=>setTimeout(wireHeaderButton,300));
+  }
+
 })();
