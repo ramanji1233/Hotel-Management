@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luxury Rooms - Supreme Hotel</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f9f9f9;
+      line-height: 1.6;
+      color: #333;
+    }
+
+    /* Header */
+    header {
+      background: linear-gradient(135deg, #041E42, #4c81b3);
+      color: white;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    header p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    nav {
+      background-color: #041E42;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 1.5rem;
+      font-weight: 600;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #4c81b3;
+    }
+
+    /* Main Content */
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .intro-section {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      margin-bottom: 3rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .intro-section h2 {
+      color: #041E42;
+      margin-bottom: 1rem;
+      font-size: 2rem;
+    }
+
+    .intro-section p {
+      color: #666;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+
+    /* Room Gallery */
+    .rooms-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .room-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .room-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    .room-image-wrapper {
+      position: relative;
+      overflow: hidden;
+      height: 250px;
+      cursor: pointer;
+      background: #ddd;
+    }
+
+    .room-image-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s;
+    }
+
+    .room-card:hover .room-image-wrapper img {
+      transform: scale(1.1);
+    }
+
+    .room-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(4, 30, 66, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .room-card:hover .room-overlay {
+      opacity: 1;
+    }
+
+    .view-btn {
+      background: #4c81b3;
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s;
+    }
+
+    .view-btn:hover {
+      background: #051542;
+    }
+
+    .room-details {
+      padding: 1.5rem;
+    }
+
+    .room-details h3 {
+      color: #041E42;
+      margin-bottom: 0.5rem;
+      font-size: 1.3rem;
+    }
+
+    .room-type {
+      color: #4c81b3;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+    }
+
+    .room-price {
+      color: #ff6b6b;
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin: 1rem 0;
+    }
+
+    .room-features {
+      list-style: none;
+      margin: 1rem 0;
+      font-size: 0.95rem;
+    }
+
+    .room-features li {
+      padding: 0.4rem 0;
+      color: #666;
+      display: flex;
+      align-items: center;
+    }
+
+    .room-features li i {
+      color: #4c81b3;
+      margin-right: 0.8rem;
+      width: 20px;
+    }
+
+    .book-btn {
+      width: 100%;
+      padding: 0.8rem;
+      background: #041E42;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+      margin-top: 1rem;
+    }
+
+    .book-btn:hover {
+      background: #4c81b3;
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.6);
+      animation: fadeIn 0.3s;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-content {
+      background-color: white;
+      margin: 5% auto;
+      padding: 2rem;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 800px;
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: slideUp 0.3s;
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(50px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .close-btn {
+      color: #041E42;
+      float: right;
+      font-size: 1.5rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .close-btn:hover {
+      color: #4c81b3;
+    }
+
+    .modal-image {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal h2 {
+      color: #041E42;
+      margin-bottom: 1rem;
+      font-size: 1.8rem;
+    }
+
+    .modal-price {
+      color: #ff6b6b;
+      font-size: 1.8rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+
+    .modal-features {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      padding: 0.8rem;
+      background: #f5f5f5;
+      border-radius: 6px;
+    }
+
+    .feature-item i {
+      color: #4c81b3;
+      margin-right: 0.8rem;
+      font-size: 1.2rem;
+    }
+
+    .modal-description {
+      color: #666;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+
+    .booking-form {
+      background: #f5f5f5;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-top: 1.5rem;
+    }
+
+    .booking-form h3 {
+      color: #041E42;
+      margin-bottom: 1rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #041E42;
+      font-weight: 600;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #4c81b3;
+      box-shadow: 0 0 5px rgba(76, 129, 179, 0.3);
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 1rem;
+      background: #4c81b3;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s;
+    }
+
+    .submit-btn:hover {
+      background: #051542;
+    }
+
+    /* Amenities Section */
+    .amenities-section {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      margin-bottom: 3rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .amenities-section h2 {
+      color: #041E42;
+      margin-bottom: 1.5rem;
+      font-size: 1.8rem;
+    }
+
+    .amenities-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .amenity-card {
+      text-align: center;
+      padding: 1.5rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      transition: transform 0.3s;
+    }
+
+    .amenity-card:hover {
+      transform: translateY(-5px);
+      background: #f0f0f0;
+    }
+
+    .amenity-card i {
+      font-size: 2rem;
+      color: #4c81b3;
+      margin-bottom: 1rem;
+    }
+
+    .amenity-card h3 {
+      color: #041E42;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Footer */
+    footer {
+      background: #11244d;
+      color: white;
+      text-align: center;
+      padding: 2rem;
+      margin-top: 3rem;
+    }
+
+    footer p {
+      margin-bottom: 0.5rem;
+    }
+
+    footer a {
+      color: #4c81b3;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 1.8rem;
+      }
+
+      nav a {
+        display: block;
+        margin: 0.5rem 0;
+      }
+
+      .modal-features {
+        grid-template-columns: 1fr;
+      }
+
+      .rooms-gallery {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Luxury Rooms</h1>
+    <p>Experience Ultimate Comfort and Elegance</p>
+  </header>
+
+  <nav>
+    <a href="index.html"><i class="fas fa-home"></i> Home</a>
+    <a href="index.html#rooms"><i class="fas fa-door-open"></i> All Rooms</a>
+    <a href="index.html#booking"><i class="fas fa-calendar"></i> Book Now</a>
+    <a href="index.html#contact"><i class="fas fa-phone"></i> Contact</a>
+  </nav>
+
+  <div class="container">
+    <!-- Introduction Section -->
+    <section class="intro-section">
+      <h2>Welcome to Our Luxury Collection</h2>
+      <p>Indulge yourself in the pinnacle of comfort and sophistication. Our Luxury Rooms are meticulously designed to provide you with an unforgettable stay. Each room features premium amenities, breathtaking views, and personalized service that exceeds expectations.</p>
+      <p>Whether you're traveling for business or leisure, our luxury accommodations offer the perfect sanctuary for relaxation and rejuvenation.</p>
+    </section>
+
+    <!-- Room Gallery -->
+    <section class="rooms-gallery" id="roomsGallery">
+      <!-- Room cards will be dynamically generated here -->
+    </section>
+
+    <!-- Amenities Section -->
+    <section class="amenities-section">
+      <h2>Premium Amenities</h2>
+      <div class="amenities-grid">
+        <div class="amenity-card">
+          <i class="fas fa-wifi"></i>
+          <h3>High-Speed WiFi</h3>
+          <p>Complimentary high-speed internet throughout your room</p>
+        </div>
+        <div class="amenity-card">
+          <i class="fas fa-spa"></i>
+          <h3>Luxury Spa</h3>
+          <p>Access to our world-class spa facilities</p>
+        </div>
+        <div class="amenity-card">
+          <i class="fas fa-utensils"></i>
+          <h3>Room Service</h3>
+          <p>24/7 fine dining room service available</p>
+        </div>
+        <div class="amenity-card">
+          <i class="fas fa-swimming-pool"></i>
+          <h3>Infinity Pool</h3>
+          <p>Private access to our signature infinity pool</p>
+        </div>
+        <div class="amenity-card">
+          <i class="fas fa-dumbbell"></i>
+          <h3>Fitness Center</h3>
+          <p>State-of-the-art gym and wellness facilities</p>
+        </div>
+        <div class="amenity-card">
+          <i class="fas fa-concierge-bell"></i>
+          <h3>Concierge Service</h3>
+          <p>Dedicated concierge for your every need</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Room Details Modal -->
+  <div id="roomModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal()">&times;</span>
+      <img id="modalImage" src="" alt="" class="modal-image">
+      <h2 id="modalTitle"></h2>
+      <div class="modal-price" id="modalPrice"></div>
+      
+      <div class="modal-features" id="modalFeatures"></div>
+      
+      <div class="modal-description" id="modalDescription"></div>
+      
+      <div class="booking-form">
+        <h3>Book This Room</h3>
+        <form onsubmit="submitBooking(event)">
+          <div class="form-group">
+            <label for="guestName">Guest Name:</label>
+            <input type="text" id="guestName" required>
+          </div>
+          <div class="form-group">
+            <label for="checkIn">Check-in Date:</label>
+            <input type="date" id="checkIn" required>
+          </div>
+          <div class="form-group">
+            <label for="checkOut">Check-out Date:</label>
+            <input type="date" id="checkOut" required>
+          </div>
+          <div class="form-group">
+            <label for="guests">Number of Guests:</label>
+            <select id="guests" required>
+              <option value="">Select guests</option>
+              <option value="1">1 Guest</option>
+              <option value="2">2 Guests</option>
+              <option value="3">3 Guests</option>
+              <option value="4">4 Guests</option>
+            </select>
+          </div>
+          <button type="submit" class="submit-btn">Confirm Booking</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Supreme Hotel - Luxury Rooms Division. All rights reserved.</p>
+    <p>Contact: <a href="mailto:luxury@supremehotel.com">luxury@supremehotel.com</a> | Phone: +91-9290842301</p>
+  </footer>
+
+  <script>
+    // Room Data
+    const luxuryRooms = [
+      {
+        id: 1,
+        name: "Presidential Suite",
+        type: "Suite",
+        price: "₹2,999/night",
+        image: "https://www.eliteworldhotels.com.tr/Upload/638385079092644033_a616d893.jpg",
+        features: ["King Bed", "City View", "Jacuzzi", "Balcony"],
+        description: "Experience unparalleled luxury in our Presidential Suite. This sprawling accommodation features a separate living and dining area, premium bedding, marble bathroom with heated floors, and panoramic city views from your private terrace."
+      },
+      {
+        id: 2,
+        name: "Royal Deluxe Room",
+        type: "Deluxe",
+        price: "₹1,999/night",
+        image: "https://diamondhotel.com/wp-content/uploads/2024/02/premier-executive3.jpg",
+        features: ["Queen Bed", "Ocean View", "Hot Tub", "Smart TV"],
+        description: "Immerse yourself in luxury with our Royal Deluxe Room. Featuring premium furnishings, state-of-the-art technology, an oversized bathroom with rain shower, and an exclusive ocean view that creates the perfect ambiance."
+      },
+      {
+        id: 3,
+        name: "Supreme Penthouse",
+        type: "Penthouse",
+        price: "₹3,999/night",
+        image: "https://images.getaroom-cdn.com/image/upload/s--ABhEhLmH--/c_limit,e_improve,fl_lossy.immutable_cache,h_460,q_auto:good,w_460/v1749920020/63f60785a0e6c36eb1056ba3cbc6c4ca9cc390df?_a=BACAEuDL&atc=e7cd1cfa",
+        features: ["Dual Kings", "360° View", "Private Spa", "Cinema"],
+        description: "Our crown jewel, the Supreme Penthouse offers an unmatched experience with dual king beds, a private spa with sauna, home theater system, and 360-degree views of the city skyline from your expansive terrace."
+      },
+      {
+        id: 4,
+        name: "Garden Sanctuary Room",
+        type: "Deluxe",
+        price: "₹1,799/night",
+        image: "https://ajgrandelite.com/wp-content/uploads/2024/04/MPP_0120.jpg",
+        features: ["King Bed", "Garden Access", "Terrazzo Bath", "WiFi"],
+        description: "Escape to tranquility in our Garden Sanctuary Room. With direct access to our lush gardens, a luxurious terrazzo bathroom, premium bedding, and serene ambiance, this room offers the perfect retreat."
+      },
+      {
+        id: 5,
+        name: "Executive Waterfront Suite",
+        type: "Suite",
+        price: "₹2,499/night",
+        image: "https://api.photon.aremedia.net.au/wp-content/uploads/sites/4/2021/02/03/32243/HL1169B06d-2.jpg?fit=900%2C750",
+        features: ["King Bed", "Water View", "Soaking Tub", "Desk"],
+        description: "The Executive Waterfront Suite combines business and pleasure seamlessly. Features include a spacious work area, luxurious soaking tub overlooking the waterfront, premium amenities, and high-speed connectivity."
+      },
+      {
+        id: 6,
+        name: "Romantic Honeymoon Suite",
+        type: "Suite",
+        price: "₹2,299/night",
+        image: "https://zeroinchinteriorsltd.com/wp-content/uploads/2023/09/The-primary-dining-area-of-a-modern-and-minimalistic-Italian-Fine-Dining-restaurant-adorned-in-raspberry-tones.-2.jpg",
+        features: ["King Bed", "Canopy", "Champagne Bar", "Fireplace"],
+        description: "Create unforgettable memories in our Romantic Honeymoon Suite. Complete with a king canopy bed, fireplace, champagne bar, rose petals, and a romantic ambiance perfect for special occasions."
+      }
+    ];
+
+    let currentRoom = null;
+
+    // Initialize room gallery
+    function initializeRooms() {
+      const gallery = document.getElementById('roomsGallery');
+      gallery.innerHTML = '';
+
+      luxuryRooms.forEach(room => {
+        const card = document.createElement('div');
+        card.className = 'room-card';
+        card.innerHTML = `
+          <div class="room-image-wrapper" onclick="openModal(${room.id})">
+            <img src="${room.image}" alt="${room.name}">
+            <div class="room-overlay">
+              <button class="view-btn">View Details</button>
+            </div>
+          </div>
+          <div class="room-details">
+            <h3>${room.name}</h3>
+            <div class="room-type">${room.type}</div>
+            <div class="room-price">${room.price}</div>
+            <ul class="room-features">
+              ${room.features.map(feature => `<li><i class="fas fa-check"></i>${feature}</li>`).join('')}
+            </ul>
+            <button class="book-btn" onclick="openModal(${room.id})">Book This Room</button>
+          </div>
+        `;
+        gallery.appendChild(card);
+      });
+    }
+
+    // Open Modal
+    function openModal(roomId) {
+      currentRoom = luxuryRooms.find(r => r.id === roomId);
+      
+      if (!currentRoom) return;
+
+      document.getElementById('modalImage').src = currentRoom.image;
+      document.getElementById('modalTitle').textContent = currentRoom.name;
+      document.getElementById('modalPrice').textContent = currentRoom.price;
+      document.getElementById('modalDescription').textContent = currentRoom.description;
+
+      const featuresHtml = currentRoom.features.map(feature => 
+        `<div class="feature-item"><i class="fas fa-star"></i><span>${feature}</span></div>`
+      ).join('');
+      document.getElementById('modalFeatures').innerHTML = featuresHtml;
+
+      document.getElementById('roomModal').style.display = 'block';
+    }
+
+    // Close Modal
+    function closeModal() {
+      document.getElementById('roomModal').style.display = 'none';
+    }
+
+    // Submit Booking
+    function submitBooking(event) {
+      event.preventDefault();
+
+      const name = document.getElementById('guestName').value;
+      const checkIn = document.getElementById('checkIn').value;
+      const checkOut = document.getElementById('checkOut').value;
+      const guests = document.getElementById('guests').value;
+
+      if (!name || !checkIn || !checkOut || !guests) {
+        alert('Please fill in all fields');
+        return;
+      }
+
+      alert(`Booking Confirmed!\n\nRoom: ${currentRoom.name}\nGuest: ${name}\nCheck-in: ${checkIn}\nCheck-out: ${checkOut}\nGuests: ${guests}\n\nThank you for choosing Supreme Hotel Luxury Rooms!`);
+
+      // Save booking to localStorage
+      const bookings = JSON.parse(localStorage.getItem('luxuryRoomBookings') || '[]');
+      bookings.push({
+        room: currentRoom.name,
+        guest: name,
+        checkIn,
+        checkOut,
+        guests,
+        timestamp: new Date().toISOString()
+      });
+      localStorage.setItem('luxuryRoomBookings', JSON.stringify(bookings));
+
+      closeModal();
+      document.querySelector('.booking-form form').reset();
+    }
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+      const modal = document.getElementById('roomModal');
+      if (event.target === modal) {
+        closeModal();
+      }
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', initializeRooms);
+  </script>
+</body>
+</html>
