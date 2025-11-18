@@ -44,17 +44,42 @@
     const modal = document.getElementById('nearbyModalRoot');
     const body = document.getElementById('nearbyBody');
     body.innerHTML = '';
-    if(!results.length){ body.innerHTML = '<p>No nearby hotels found.</p>'; return; }
+    // show user's coords and maps search button
+    const headerInfo = document.createElement('div');
+    headerInfo.style.marginBottom = '8px';
+    headerInfo.innerHTML = `<div style="font-size:13px;color:#222;margin-bottom:6px">Your location: ${userPos.lat.toFixed(5)}, ${userPos.lon.toFixed(5)}</div>`;
+    const mapsBtn = document.createElement('a');
+    mapsBtn.className = 'nearby-actions';
+    const mapsLink = document.createElement('a');
+    mapsLink.href = `https://www.google.com/maps/search/hotels/@${userPos.lat},${userPos.lon},14z`;
+    mapsLink.target = '_blank';
+    mapsLink.textContent = 'Search Google Maps for hotels near me';
+    mapsLink.style.display = 'inline-block';
+    mapsLink.style.padding = '8px 10px';
+    mapsLink.style.background = '#4c81b3';
+    mapsLink.style.color = '#fff';
+    mapsLink.style.borderRadius = '6px';
+    mapsLink.style.textDecoration = 'none';
+    headerInfo.appendChild(mapsLink);
+    body.appendChild(headerInfo);
+
+    if(!results.length){ body.innerHTML += '<p>No nearby hotels found.</p>'; document.getElementById('nearbyModalRoot').classList.add('open'); return; }
     results.forEach(r=>{
       const div = document.createElement('div'); div.className='nearby-item';
       const dist = (r.distance).toFixed(2);
       div.innerHTML = `<h4>${escapeHtml(r.name)} <small style="color:#666;font-weight:600">${dist} km</small></h4><p>${escapeHtml(r.address)}</p>`;
       const actions = document.createElement('div'); actions.className='nearby-actions';
+      // Navigate: directions from user's location
       const nav = document.createElement('a'); nav.className='navigate'; nav.textContent='Navigate';
       nav.href = `https://www.google.com/maps/dir/?api=1&origin=${userPos.lat},${userPos.lon}&destination=${r.lat},${r.lon}`;
       nav.target = '_blank';
+      // Also allow searching the hotel name on maps centered on the hotel
+      const searchOnMaps = document.createElement('a'); searchOnMaps.className='navigate'; searchOnMaps.textContent='Open on Maps';
+      searchOnMaps.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(r.name)}&query_place_id=`;
+      searchOnMaps.target = '_blank';
       const call = document.createElement('a'); call.className='call'; call.textContent='Call'; call.href = `tel:${r.phone}`;
-      actions.appendChild(nav); actions.appendChild(call); div.appendChild(actions);
+      actions.appendChild(nav); actions.appendChild(searchOnMaps); actions.appendChild(call);
+      div.appendChild(actions);
       body.appendChild(div);
     });
     document.getElementById('nearbyModalRoot').classList.add('open');
@@ -69,9 +94,9 @@
     navigator.geolocation.getCurrentPosition(pos => {
       const lat = pos.coords.latitude; const lon = pos.coords.longitude;
       // compute distances
-      const list = HOTELS.map(h=>({ ...h, distance: haversine(lat, lon, h.lat, h.lon) }));
+        const list = HOTELS.map(h=>({ ...h, distance: haversine(lat, lon, h.lat, h.lon) }));
       list.sort((a,b)=>a.distance - b.distance);
-      renderResults({lat,lon}, list);
+        renderResults({lat,lon}, list);
     }, err => {
       body.innerHTML = `<p>Unable to get location: ${escapeHtml(err.message || 'permission denied')}</p>`;
     }, {timeout:15000});
