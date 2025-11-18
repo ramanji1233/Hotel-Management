@@ -136,7 +136,7 @@
 
     const panel = document.createElement('div'); panel.className='ha-panel'; panel.style.display='none';
     panel.innerHTML = `
-      <div class="ha-header"><div style="width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center">🤖</div><h4>Hotel Assistant</h4></div>
+      <div class="ha-header"><div style="width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center">🤖</div><h4>Hotel Assistant</h4><button id="haNearby" class="ha-nearby" title="Find nearby hotels">Nearby</button></div>
       <div class="ha-body" id="haBody"><div class="ha-message bot">Hello — I can answer questions about this site (bookings, rooms, facilities). I only search project files.</div></div>
       <div class="ha-input"><input id="haInput" placeholder="Ask about rooms, bookings, dining..."/><button id="haSend">Ask</button></div>
       <div class="ha-footer-note">Responses are generated from site files only — no external AI used.</div>
@@ -184,6 +184,28 @@
       const msgs = body.querySelectorAll('.ha-message.bot');
       if(msgs.length) msgs[msgs.length-1].remove();
       appendMessage(ans.text, 'bot', ans.sources || []);
+    }
+
+    // Nearby button behavior: open Google Maps centered on user's geolocation if available
+    const nearbyBtn = panel.querySelector('#haNearby');
+    if(nearbyBtn){
+      nearbyBtn.addEventListener('click', ()=>{
+        appendMessage('Opening Maps for nearby hotels...', 'bot');
+        if(navigator.geolocation){
+          navigator.geolocation.getCurrentPosition(pos=>{
+            const lat = pos.coords.latitude; const lon = pos.coords.longitude;
+            const url = `https://www.google.com/maps/search/hotels/@${lat},${lon},14z`;
+            window.open(url, '_blank');
+          }, err=>{
+            // fallback to generic search
+            const url = 'https://www.google.com/maps/search/hotels';
+            window.open(url, '_blank');
+          }, {timeout:10000});
+        } else {
+          const url = 'https://www.google.com/maps/search/hotels';
+          window.open(url, '_blank');
+        }
+      });
     }
   }
 

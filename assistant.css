@@ -43,6 +43,17 @@
   align-items:center;
   gap:10px;
 }
+.ha-nearby{
+  margin-left:auto;
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  border: none;
+  padding: 6px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size:13px;
+}
+.ha-nearby:active{transform:translateY(1px)}
 .ha-header h4{margin:0;font-size:14px}
 .ha-body{padding:10px;overflow:auto;flex:1;background:#fbfbfd}
 .ha-message{margin:8px 0;padding:8px 10px;border-radius:8px;max-width:85%;font-size:13px;line-height:1.3}
