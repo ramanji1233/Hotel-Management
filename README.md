@@ -63,85 +63,53 @@ A comprehensive Hotel Management System designed to streamline hotel operations 
 - [Add any other dependencies]
 
 ### Setup Instructions
+# Hotel-Management — In-Project Assistant
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/ramanji1233/Hotel-Management.git
-   cd Hotel-Management
-   ```
+This repository contains a static Hotel Management demo site and a lightweight in-project assistant widget (no external AI services required).
 
-2. Install dependencies:
-   ```bash
-   # Add your installation commands here
-   # Example: pip install -r requirements.txt
-   # Example: npm install
-   ```
+## Recent updates (Nov 2025)
+- Added a compact `Nearby` button inside the assistant widget header. Clicking it opens Google Maps centered on the user's location (if geolocation is allowed); otherwise it opens a generic hotels search. This replaces the previous standalone "Nearby Hotels" UI.
+- The old standalone Nearby Hotels UI (header select/button) and the larger `nearby-hotels.js` / `nearby-hotels.css` feature were removed/neutralized. If you need that feature restored, it can be recovered from git history or re-implemented.
 
-3. Configure database:
-   ```bash
-   # Add database setup instructions
-   ```
+## What is in this repo
+- `assistant.js` — a client-side assistant that indexes the project's HTML pages and answers queries using simple keyword search and heuristics.
+- `assistant.css` — styles for the assistant chat widget.
+- The assistant is injected into main pages so it loads on:
+  - `index.html`, `main.html`, `login.html`, `luxury-rooms.html`, `dining-hall.html`, `infinity-pool.html`, `food-beverages.html`
 
-4. Run the application:
-   ```bash
-   # Add commands to start the application
-   ```
+## How the assistant works
+- On load the assistant fetches the listed HTML pages and builds a simple index of page text.
+- It answers questions using rule-based heuristics (booking, prices, pool, dining, beverages) and falls back to a keyword search that returns matching sentences and sources.
+- Important: No external AI or remote LLM APIs are called; all responses come from local project files.
 
-## Usage
+## Assistant: Nearby button behavior
+- Location: the button is in the assistant header (compact, right-aligned).
+- Behavior: when clicked it attempts to get the browser geolocation and opens Google Maps with a hotels search centered on the detected coordinates. If geolocation is denied or unavailable, it opens a generic `https://www.google.com/maps/search/hotels` page.
 
-1. **Admin Access**: 
-   - Login with admin credentials
-   - Manage rooms, staff, and system settings
-   - View reports and analytics
+## Demo credentials (for the login page)
+- Email: `admin@supremehotel.com`
+- Password: `Admin@123`
 
-2. **Staff Access**:
-   - Handle guest check-ins and check-outs
-   - Process bookings and payments
-   - Update room status
+## Run locally
+1. Start a simple HTTP server in the repository folder (so `fetch()` can load pages):
 
-3. **Guest Access**:
-   - Browse available rooms
-   - Make reservations
-   - View booking history
+```powershell
+cd "c:\hotel management\Hotel-Management"
+python -m http.server 8000
+```
 
-[Add specific usage instructions and screenshots here]
+2. Open `http://localhost:8000/index.html` in your browser.
 
-## Technologies Used
+3. Click the assistant button (bottom-right) and ask questions like:
+   - "How do I book a room?"
+   - "What are the pool hours?"
+   - "Show dining reservation options"
 
-- **Frontend**: [Add frontend technologies, e.g., HTML, CSS, JavaScript, React, Angular]
-- **Backend**: [Add backend technologies, e.g., Python, Node.js, Java, PHP]
-- **Database**: [Add database, e.g., MySQL, PostgreSQL, MongoDB]
-- **Framework**: [Add framework, e.g., Django, Flask, Express.js, Spring Boot]
-- **Other Tools**: [Add any other relevant tools and libraries]
-
-## Contributing
-
-Contributions are welcome! If you'd like to contribute to this project, please follow these steps:
-
-1. Fork the repository
-2. Create a new branch (`git checkout -b feature/YourFeature`)
-3. Make your changes and commit them (`git commit -m 'Add some feature'`)
-4. Push to the branch (`git push origin feature/YourFeature`)
-5. Open a Pull Request
-
-Please ensure your code follows the project's coding standards and includes appropriate tests.
-
-## License
-
-[Specify your license here, e.g., MIT License, Apache 2.0, GPL v3.0]
-
-This project is licensed under the [LICENSE NAME] - see the [LICENSE](LICENSE) file for details.
-
-## Contact
-
-**Project Maintainer**: [Your Name]
-
-- **GitHub**: [@ramanji1233](https://github.com/ramanji1233)
-- **Email**: [Your Email Address]
-- **LinkedIn**: [Your LinkedIn Profile]
-
-For questions, suggestions, or issues, please open an issue on GitHub or contact me directly.
+## Notes & next steps
+- The assistant is intentionally local-only and simple. If you want richer natural-language answers, we can integrate a backend + LLM (securely) and add indexing improvements (TF-IDF, embeddings).
+- The legacy Nearby Hotels feature was removed to simplify the UI; if you want a restored in-widget list (without the old header controls), I can add a lightweight list that queries a remote API or a small backend proxy.
 
 ---
+Created and maintained by the project team.
 
-*Last Updated: October 2025*
+*Last Updated: November 2025*
