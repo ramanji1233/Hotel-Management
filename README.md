@@ -1,3 +1,43 @@
+# Hotel-Management — In-Project Assistant
+
+This repository contains a static Hotel Management demo site and a lightweight in-project assistant widget (no external AI services required).
+
+## What I added
+- `assistant.js` — a small client-side assistant that indexes the project's HTML pages and answers queries using simple keyword search and heuristics.
+- `assistant.css` — styles for the assistant chat widget.
+- Script tag injected into main pages so the assistant loads on:
+  - `index.html`, `main.html`, `login.html`, `luxury-rooms.html`, `dining-hall.html`, `infinity-pool.html`, `food-beverages.html`
+
+## How the assistant works
+- On load the assistant fetches the listed HTML pages and builds a simple index of page text.
+- It answers questions using rule-based heuristics (booking, prices, pool, dining, beverages) and falls back to a keyword search that returns matching sentences and sources.
+- Important: No external AI or remote APIs are called; all responses come from local project files.
+
+## Demo credentials (for the login page)
+- Email: `admin@supremehotel.com`
+- Password: `Admin@123`
+
+## Run locally
+1. Start a simple HTTP server in the repository folder (so fetch() can load pages):
+
+```powershell
+cd "c:\hotel management\Hotel-Management"
+python -m http.server 8000
+```
+
+2. Open `http://localhost:8000/index.html` in your browser.
+
+3. Click the assistant button (bottom-right) and ask questions like:
+   - "How do I book a room?"
+   - "What are the pool hours?"
+   - "Show dining reservation options"
+
+## Notes & next steps
+- The assistant is intentionally local-only and simple. If you want richer natural-language answers, we can integrate a backend + LLM (securely) and add indexing improvements (TF-IDF, embeddings).
+- I can also add a short `README` section describing how to extend the assistant.
+
+---
+Created and committed by the project assistant.
 # Hotel Management System
 
 ## Description
