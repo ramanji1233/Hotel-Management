@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Food & Beverages - Supreme Hotel</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f9f9f9;
+      line-height: 1.6;
+      color: #333;
+    }
+
+    header {
+      background: linear-gradient(135deg, #041E42, #4c81b3);
+      color: white;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    header p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    nav {
+      background-color: #041E42;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 1.5rem;
+      font-weight: 600;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #4c81b3;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .intro-section {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      margin-bottom: 3rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .intro-section h2 {
+      color: #041E42;
+      margin-bottom: 1rem;
+      font-size: 2rem;
+    }
+
+    .intro-section p {
+      color: #666;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .gallery-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .gallery-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    .image-wrapper {
+      position: relative;
+      overflow: hidden;
+      height: 250px;
+      cursor: pointer;
+      background: #ddd;
+    }
+
+    .image-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s;
+    }
+
+    .gallery-card:hover .image-wrapper img {
+      transform: scale(1.1);
+    }
+
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(4, 30, 66, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .gallery-card:hover .overlay {
+      opacity: 1;
+    }
+
+    .view-btn {
+      background: #4c81b3;
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s;
+    }
+
+    .view-btn:hover {
+      background: #051542;
+    }
+
+    .card-content {
+      padding: 1.5rem;
+    }
+
+    .card-content h3 {
+      color: #041E42;
+      margin-bottom: 0.5rem;
+      font-size: 1.2rem;
+    }
+
+    .card-content p {
+      color: #666;
+      font-size: 0.95rem;
+    }
+
+    .features-section {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      margin-bottom: 3rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .features-section h2 {
+      color: #041E42;
+      margin-bottom: 1.5rem;
+      font-size: 1.8rem;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .feature-card {
+      text-align: center;
+      padding: 1.5rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      transition: transform 0.3s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      background: #f0f0f0;
+    }
+
+    .feature-card i {
+      font-size: 2rem;
+      color: #4c81b3;
+      margin-bottom: 1rem;
+    }
+
+    .feature-card h3 {
+      color: #041E42;
+      margin-bottom: 0.5rem;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.6);
+      animation: fadeIn 0.3s;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-content {
+      background-color: white;
+      margin: 5% auto;
+      padding: 2rem;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 800px;
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: slideUp 0.3s;
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(50px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .close-btn {
+      color: #041E42;
+      float: right;
+      font-size: 1.5rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .close-btn:hover {
+      color: #4c81b3;
+    }
+
+    .modal-image {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal h2 {
+      color: #041E42;
+      margin-bottom: 1rem;
+      font-size: 1.8rem;
+    }
+
+    .modal-description {
+      color: #666;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+
+    .booking-form {
+      background: #f5f5f5;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-top: 1.5rem;
+    }
+
+    .booking-form h3 {
+      color: #041E42;
+      margin-bottom: 1rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #041E42;
+      font-weight: 600;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 1rem;
+      font-family: Arial, sans-serif;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #4c81b3;
+      box-shadow: 0 0 5px rgba(76, 129, 179, 0.3);
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 1rem;
+      background: #4c81b3;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s;
+    }
+
+    .submit-btn:hover {
+      background: #051542;
+    }
+
+    footer {
+      background: #11244d;
+      color: white;
+      text-align: center;
+      padding: 2rem;
+      margin-top: 3rem;
+    }
+
+    footer p {
+      margin-bottom: 0.5rem;
+    }
+
+    footer a {
+      color: #4c81b3;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 1.8rem;
+      }
+
+      nav a {
+        display: block;
+        margin: 0.5rem 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Food & Beverages</h1>
+    <p>Unwind with Our Premium Culinary Treatments</p>
+  </header>
+
+  <nav>
+    <a href="index.html"><i class="fas fa-home"></i> Home</a>
+    <a href="index.html#facilities"><i class="fas fa-wine-glass"></i> All Facilities</a>
+    <a href="#contact"><i class="fas fa-phone"></i> Contact</a>
+  </nav>
+
+  <div class="container">
+    <section class="intro-section">
+      <h2>Welcome to Our Food & Beverage Experience</h2>
+      <p>Indulge in our world-class culinary offerings that cater to every palate. From gourmet spa cuisine to signature cocktails, our expert mixologists and nutritionists collaborate to bring you a holistic wellness experience through food and beverages.</p>
+      <p>Each offering is carefully crafted to complement your relaxation journey at Supreme Hotel.</p>
+    </section>
+
+    <section class="gallery-grid" id="galleryGrid">
+      <!-- Gallery items will be generated here -->
+    </section>
+
+    <section class="features-section">
+      <h2>Our Beverage Specialties</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <i class="fas fa-leaf"></i>
+          <h3>Herbal Teas</h3>
+          <p>Therapeutic wellness teas</p>
+        </div>
+        <div class="feature-card">
+          <i class="fas fa-cocktail"></i>
+          <h3>Signature Cocktails</h3>
+          <p>Artisan mixed drinks</p>
+        </div>
+        <div class="feature-card">
+          <i class="fas fa-wine-bottle"></i>
+          <h3>Wine Selection</h3>
+          <p>Curated international wines</p>
+        </div>
+        <div class="feature-card">
+          <i class="fas fa-glass-citrus"></i>
+          <h3>Fresh Juices</h3>
+          <p>Cold-pressed organic juices</p>
+        </div>
+        <div class="feature-card">
+          <i class="fas fa-ice-cream"></i>
+          <h3>Smoothie Bar</h3>
+          <p>Nutritious blended drinks</p>
+        </div>
+        <div class="feature-card">
+          <i class="fas fa-coffee"></i>
+          <h3>Premium Coffee</h3>
+          <p>Artisan coffee selections</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="modalBeverage" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeBeverageModal()">&times;</span>
+      <img id="modalImage" src="" alt="" class="modal-image">
+      <h2 id="modalTitle"></h2>
+      <div class="modal-description" id="modalDescription"></div>
+      
+      <div class="booking-form">
+        <h3>Order a Beverage Treatment</h3>
+        <form onsubmit="submitBeverageOrder(event)">
+          <div class="form-group">
+            <label for="guestName">Guest Name:</label>
+            <input type="text" id="guestName" required>
+          </div>
+          <div class="form-group">
+            <label for="orderDate">Delivery Date:</label>
+            <input type="date" id="orderDate" required>
+          </div>
+          <div class="form-group">
+            <label for="orderTime">Preferred Time:</label>
+            <input type="time" id="orderTime" required>
+          </div>
+          <div class="form-group">
+            <label for="quantity">Quantity:</label>
+            <select id="quantity" required>
+              <option value="">Select quantity</option>
+              <option value="1">1 Service</option>
+              <option value="2">2 Services</option>
+              <option value="3">3 Services</option>
+              <option value="5">5 Services (Package)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="specialRequests">Special Requests:</label>
+            <textarea id="specialRequests" rows="3" placeholder="Any allergies or preferences?"></textarea>
+          </div>
+          <button type="submit" class="submit-btn">Place Order</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Supreme Hotel - Food & Beverage Division. All rights reserved.</p>
+    <p>Contact: <a href="mailto:fbeverage@supremehotel.com">fbeverage@supremehotel.com</a> | Phone: +91-9290842301</p>
+  </footer>
+
+  <script>
+    const beverageItems = [
+      {
+        id: 1,
+        name: "Spa Wellness Juice Bar",
+        image: "https://www.foodandhome.co.za/wp-content/uploads/2016/09/death-by-chocolate-milkshake-recipe-1-e1705393684672.jpg",
+        description: "Cold-pressed juices made fresh daily with organic fruits and vegetables. Our wellness juices are designed to detoxify, energize, and rejuvenate. Choose from cleanse blends, immunity boosters, or energy shots."
+      },
+      {
+        id: 2,
+        name: "Signature Cocktail Lounge",
+        image: "https://api.photon.aremedia.net.au/wp-content/uploads/sites/4/2021/02/03/32243/HL1169B06d-2.jpg?fit=900%2C750",
+        description: "Experience our award-winning mixologists' creations. Each cocktail is a masterpiece, crafted with premium spirits, fresh ingredients, and artistic flair. Visit our lounge for an evening of sophistication."
+      },
+      {
+        id: 3,
+        name: "Herbal Tea Sanctuary",
+        image: "https://thescranline.com/wp-content/uploads/2023/05/CHICKEN-ALFREDO-S-01.jpg",
+        description: "Discover ancient tea traditions from around the world. Our collection includes green teas, oolong, herbal infusions, and medicinal blends. Each tea is selected for its healing properties and exquisite taste."
+      },
+      {
+        id: 4,
+        name: "Premium Coffee Experience",
+        image: "https://safrescobaldistatic.blob.core.windows.net/media/2022/11/PIZZA-MARGHERITA.jpg",
+        description: "Artisan coffee sourced from the world's finest plantations. Our baristas use precision brewing methods to extract the perfect cup. From espresso shots to specialty lattes, experience coffee perfection."
+      }
+    ];
+
+    let currentBeverageItem = null;
+
+    function initializeBeverage() {
+      const gallery = document.getElementById('galleryGrid');
+      gallery.innerHTML = '';
+
+      beverageItems.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'gallery-card';
+        card.innerHTML = `
+          <div class="image-wrapper" onclick="openBeverageModal(${item.id})">
+            <img src="${item.image}" alt="${item.name}">
+            <div class="overlay">
+              <button class="view-btn">View Details</button>
+            </div>
+          </div>
+          <div class="card-content">
+            <h3>${item.name}</h3>
+            <p>${item.description.substring(0, 80)}...</p>
+          </div>
+        `;
+        gallery.appendChild(card);
+      });
+    }
+
+    function openBeverageModal(itemId) {
+      currentBeverageItem = beverageItems.find(item => item.id === itemId);
+      
+      if (!currentBeverageItem) return;
+
+      document.getElementById('modalImage').src = currentBeverageItem.image;
+      document.getElementById('modalTitle').textContent = currentBeverageItem.name;
+      document.getElementById('modalDescription').textContent = currentBeverageItem.description;
+
+      document.getElementById('modalBeverage').style.display = 'block';
+    }
+
+    function closeBeverageModal() {
+      document.getElementById('modalBeverage').style.display = 'none';
+    }
+
+    function submitBeverageOrder(event) {
+      event.preventDefault();
+
+      const name = document.getElementById('guestName').value;
+      const date = document.getElementById('orderDate').value;
+      const time = document.getElementById('orderTime').value;
+      const quantity = document.getElementById('quantity').value;
+      const requests = document.getElementById('specialRequests').value;
+
+      alert(`Order Confirmed!\n\nBeverage: ${currentBeverageItem.name}\nGuest: ${name}\nDate: ${date}\nTime: ${time}\nQuantity: ${quantity}\n\nYour order will be delivered shortly!`);
+
+      const orders = JSON.parse(localStorage.getItem('beverageOrders') || '[]');
+      orders.push({
+        item: currentBeverageItem.name,
+        guest: name,
+        date,
+        time,
+        quantity,
+        requests,
+        timestamp: new Date().toISOString()
+      });
+      localStorage.setItem('beverageOrders', JSON.stringify(orders));
+
+      closeBeverageModal();
+      document.querySelector('.booking-form form').reset();
+    }
+
+    window.onclick = function(event) {
+      const modal = document.getElementById('modalBeverage');
+      if (event.target === modal) {
+        closeBeverageModal();
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', initializeBeverage);
+  </script>
+</body>
+</html>

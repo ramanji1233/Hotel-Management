@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Infinity Pool - Supreme Hotel</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f9f9f9;
+      line-height: 1.6;
+      color: #333;
+    }
+
+    header {
+      background: linear-gradient(135deg, #041E42, #4c81b3);
+      color: white;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    header p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    nav {
+      background-color: #041E42;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 1.5rem;
+      font-weight: 600;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #4c81b3;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .intro-section {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      margin-bottom: 3rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .intro-section h2 {
+      color: #041E42;
+      margin-bottom: 1rem;
+      font-size: 2rem;
+    }
+
+    .intro-section p {
+      color: #666;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .gallery-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .gallery-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    .image-wrapper {
+      position: relative;
+      overflow: hidden;
+      height: 250px;
+      cursor: pointer;
+      background: #ddd;
+    }
+
+    .image-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s;
+    }
+
+    .gallery-card:hover .image-wrapper img {
+      transform: scale(1.1);
+    }
+
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(4, 30, 66, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .gallery-card:hover .overlay {
+      opacity: 1;
+    }
+
+    .view-btn {
+      background: #4c81b3;
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s;
+    }
+
+    .view-btn:hover {
+      background: #051542;
+    }
+
+    .card-content {
+      padding: 1.5rem;
+    }
+
+    .card-content h3 {
+      color: #041E42;
+      margin-bottom: 0.5rem;
+      font-size: 1.2rem;
+    }
+
+    .card-content p {
+      color: #666;
+      font-size: 0.95rem;
+    }
+
+    .features-section {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      margin-bottom: 3rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .features-section h2 {
+      color: #041E42;
+      margin-bottom: 1.5rem;
+      font-size: 1.8rem;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .feature-card {
+      text-align: center;
+      padding: 1.5rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      transition: transform 0.3s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      background: #f0f0f0;
+    }
+
+    .feature-card i {
+      font-size: 2rem;
+      color: #4c81b3;
+      margin-bottom: 1rem;
+    }
+
+    .feature-card h3 {
+      color: #041E42;
+      margin-bottom: 0.5rem;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.6);
+      animation: fadeIn 0.3s;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-content {
+      background-color: white;
+      margin: 5% auto;
+      padding: 2rem;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 800px;
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: slideUp 0.3s;
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(50px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .close-btn {
+      color: #041E42;
+      float: right;
+      font-size: 1.5rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .close-btn:hover {
+      color: #4c81b3;
+    }
+
+    .modal-image {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal h2 {
+      color: #041E42;
+      margin-bottom: 1rem;
+      font-size: 1.8rem;
+    }
+
+    .modal-description {
+      color: #666;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+
+    .booking-form {
+      background: #f5f5f5;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-top: 1.5rem;
+    }
+
+    .booking-form h3 {
+      color: #041E42;
+      margin-bottom: 1rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #041E42;
+      font-weight: 600;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #4c81b3;
+      box-shadow: 0 0 5px rgba(76, 129, 179, 0.3);
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 1rem;
+      background: #4c81b3;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s;
+    }
+
+    .submit-btn:hover {
+      background: #051542;
+    }
+
+    footer {
+      background: #11244d;
+      color: white;
+      text-align: center;
+      padding: 2rem;
+      margin-top: 3rem;
+    }
+
+    footer p {
+      margin-bottom: 0.5rem;
+    }
+
+    footer a {
+      color: #4c81b3;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 1.8rem;
+      }
+
+      nav a {
+        display: block;
+        margin: 0.5rem 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Infinity Pool</h1>
+    <p>Relax with a View at Supreme Heights</p>
+  </header>
+
+  <nav>
+    <a href="index.html"><i class="fas fa-home"></i> Home</a>
+    <a href="index.html#facilities"><i class="fas fa-water"></i> All Facilities</a>
+    <a href="#contact"><i class="fas fa-phone"></i> Contact</a>
+  </nav>
+
+  <div class="container">
+    <section class="intro-section">
+      <h2>Welcome to Our Infinity Pool</h2>
+      <p>Escape to paradise at our signature infinity pool, where the water meets the horizon. Located on our rooftop terrace, this stunning aquatic oasis offers the perfect blend of luxury and relaxation with breathtaking panoramic views.</p>
+      <p>Whether you seek refreshing laps, leisurely poolside dining, or simply unwind by the water, our infinity pool is the ultimate destination.</p>
+    </section>
+
+    <section class="gallery-grid" id="galleryGrid">
+      <!-- Gallery items will be generated here -->
+    </section>
+
+    <section class="features-section">
+      <h2>Pool Amenities</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <i class="fas fa-water"></i>
+          <h3>Olympic Size</h3>
+          <p>50-meter infinity pool</p>
+        </div>
+        <div class="feature-card">
+          <i class="fas fa-thermometer-half"></i>
+          <h3>Temperature Control</h3>
+          <p>Climate-controlled water</p>
+        </div>
+        <div class="feature-card">
+          <i class="fas fa-spa"></i>
+          <h3>Hot Tub</h3>
+          <p>Heated jacuzzi available</p>
+        </div>
+        <div class="feature-card">
+          <i class="fas fa-umbrella"></i>
+          <h3>Cabanas</h3>
+          <p>Private cabanas with shade</p>
+        </div>
+        <div class="feature-card">
+          <i class="fas fa-utensils"></i>
+          <h3>Poolside Bar</h3>
+          <p>Refreshments & cocktails</p>
+        </div>
+        <div class="feature-card">
+          <i class="fas fa-lock"></i>
+          <h3>Safe & Secure</h3>
+          <p>Lifeguards on duty 24/7</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="modalPool" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closePoolModal()">&times;</span>
+      <img id="modalImage" src="" alt="" class="modal-image">
+      <h2 id="modalTitle"></h2>
+      <div class="modal-description" id="modalDescription"></div>
+      
+      <div class="booking-form">
+        <h3>Book a Cabana</h3>
+        <form onsubmit="submitPoolBooking(event)">
+          <div class="form-group">
+            <label for="guestName">Guest Name:</label>
+            <input type="text" id="guestName" required>
+          </div>
+          <div class="form-group">
+            <label for="bookingDate">Date:</label>
+            <input type="date" id="bookingDate" required>
+          </div>
+          <div class="form-group">
+            <label for="startTime">Check-in Time:</label>
+            <input type="time" id="startTime" required>
+          </div>
+          <div class="form-group">
+            <label for="duration">Duration (Hours):</label>
+            <select id="duration" required>
+              <option value="">Select duration</option>
+              <option value="2">2 Hours</option>
+              <option value="4">4 Hours</option>
+              <option value="8">Full Day (8 Hours)</option>
+            </select>
+          </div>
+          <button type="submit" class="submit-btn">Book Cabana</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Supreme Hotel - Pool & Wellness Division. All rights reserved.</p>
+    <p>Contact: <a href="mailto:pool@supremehotel.com">pool@supremehotel.com</a> | Phone: +91-9290842301</p>
+  </footer>
+
+  <script>
+    const poolAreas = [
+      {
+        id: 1,
+        name: "Main Infinity Pool",
+        image: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/16/2e/29/6e/elite-byblos-hotel.jpg?w=700&h=-1&s=1",
+        description: "Our crown jewel - a 50-meter infinity pool on the 15th floor with panoramic city views. The seamless edge creates the illusion of water flowing into the horizon. Perfect for swimming laps or leisurely floating while enjoying the cityscape."
+      },
+      {
+        id: 2,
+        name: "Relaxation Pool",
+        image: "https://api.photon.aremedia.net.au/wp-content/uploads/sites/4/2021/02/03/32243/HL1169B06d-2.jpg?fit=900%2C750",
+        description: "A shallow, warm pool designed for relaxation and socializing. Featuring lounging ledges, underwater seating, and ambient lighting for evening swims. Temperature maintained at a comfortable 28°C year-round."
+      },
+      {
+        id: 3,
+        name: "Children's Pool",
+        image: "https://thescranline.com/wp-content/uploads/2023/05/CHICKEN-ALFREDO-S-01.jpg",
+        description: "A safe, supervised pool area for children with water slides, fountains, and shallow depths. Complete with trained lifeguards and modern safety equipment. Perfect for family fun and water activities."
+      },
+      {
+        id: 4,
+        name: "Rooftop Hot Tub",
+        image: "https://www.foodandhome.co.za/wp-content/uploads/2016/09/death-by-chocolate-milkshake-recipe-1-e1705393684672.jpg",
+        description: "Luxurious heated jacuzzi with jet streams and herbal aromatherapy. Accommodates up to 12 guests and offers stunning night views. Perfect for unwinding after a busy day."
+      }
+    ];
+
+    let currentPoolItem = null;
+
+    function initializePool() {
+      const gallery = document.getElementById('galleryGrid');
+      gallery.innerHTML = '';
+
+      poolAreas.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'gallery-card';
+        card.innerHTML = `
+          <div class="image-wrapper" onclick="openPoolModal(${item.id})">
+            <img src="${item.image}" alt="${item.name}">
+            <div class="overlay">
+              <button class="view-btn">View Details</button>
+            </div>
+          </div>
+          <div class="card-content">
+            <h3>${item.name}</h3>
+            <p>${item.description.substring(0, 80)}...</p>
+          </div>
+        `;
+        gallery.appendChild(card);
+      });
+    }
+
+    function openPoolModal(itemId) {
+      currentPoolItem = poolAreas.find(item => item.id === itemId);
+      
+      if (!currentPoolItem) return;
+
+      document.getElementById('modalImage').src = currentPoolItem.image;
+      document.getElementById('modalTitle').textContent = currentPoolItem.name;
+      document.getElementById('modalDescription').textContent = currentPoolItem.description;
+
+      document.getElementById('modalPool').style.display = 'block';
+    }
+
+    function closePoolModal() {
+      document.getElementById('modalPool').style.display = 'none';
+    }
+
+    function submitPoolBooking(event) {
+      event.preventDefault();
+
+      const name = document.getElementById('guestName').value;
+      const date = document.getElementById('bookingDate').value;
+      const time = document.getElementById('startTime').value;
+      const duration = document.getElementById('duration').value;
+
+      alert(`Cabana Booking Confirmed!\n\nArea: ${currentPoolItem.name}\nGuest: ${name}\nDate: ${date}\nTime: ${time}\nDuration: ${duration} hours\n\nThank you for choosing Supreme Hotel!`);
+
+      const bookings = JSON.parse(localStorage.getItem('poolBookings') || '[]');
+      bookings.push({
+        area: currentPoolItem.name,
+        guest: name,
+        date,
+        time,
+        duration,
+        timestamp: new Date().toISOString()
+      });
+      localStorage.setItem('poolBookings', JSON.stringify(bookings));
+
+      closePoolModal();
+      document.querySelector('.booking-form form').reset();
+    }
+
+    window.onclick = function(event) {
+      const modal = document.getElementById('modalPool');
+      if (event.target === modal) {
+        closePoolModal();
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', initializePool);
+  </script>
+</body>
+</html>
