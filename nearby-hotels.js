@@ -93,13 +93,51 @@
     if(!navigator.geolocation){ body.innerHTML = '<p>Geolocation is not supported by your browser.</p>'; return; }
     navigator.geolocation.getCurrentPosition(pos => {
       const lat = pos.coords.latitude; const lon = pos.coords.longitude;
-      // compute distances
+      // first try to fetch live nearby hotels via Overpass (OpenStreetMap)
+      fetchOverpassNearby(lat, lon, 2000).then(results => {
+        if(results && results.length){
+          renderResults({lat,lon}, results);
+        } else {
+          // fallback to sample dataset
+          const list = HOTELS.map(h=>({ ...h, distance: haversine(lat, lon, h.lat, h.lon) }));
+          list.sort((a,b)=>a.distance - b.distance);
+          renderResults({lat,lon}, list);
+        }
+      }).catch(err => {
+        console.error('Overpass error', err);
         const list = HOTELS.map(h=>({ ...h, distance: haversine(lat, lon, h.lat, h.lon) }));
-      list.sort((a,b)=>a.distance - b.distance);
+        list.sort((a,b)=>a.distance - b.distance);
         renderResults({lat,lon}, list);
+      });
     }, err => {
       body.innerHTML = `<p>Unable to get location: ${escapeHtml(err.message || 'permission denied')}</p>`;
     }, {timeout:15000});
+  }
+
+  // Query Overpass API for nearby hotels. Returns array with {name, address, phone, lat, lon, distance}
+  async function fetchOverpassNearby(lat, lon, radiusMeters){
+    const query = `[out:json][timeout:15];(node[\"tourism\"=\"hotel\"](around:${radiusMeters},${lat},${lon});way[\"tourism\"=\"hotel\"](around:${radiusMeters},${lat},${lon});relation[\"tourism\"=\"hotel\"](around:${radiusMeters},${lat},${lon}););out center tags;`;
+    const url = 'https://overpass-api.de/api/interpreter';
+    try{
+      const res = await fetch(url, { method: 'POST', body: query, headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
+      if(!res.ok) throw new Error('Overpass query failed');
+      const data = await res.json();
+      if(!data.elements || !data.elements.length) return [];
+      const items = data.elements.map(el => {
+        const tags = el.tags || {};
+        const pos = el.type === 'node' ? {lat: el.lat, lon: el.lon} : (el.center ? {lat: el.center.lat, lon: el.center.lon} : null);
+        if(!pos) return null;
+        const name = tags.name || 'Unnamed Hotel';
+        const address = [tags['addr:street'], tags['addr:housenumber'], tags['addr:city']].filter(Boolean).join(', ') || (tags['addr:full'] || tags['operator'] || '');
+        const phone = tags.phone || tags['contact:phone'] || tags['telephone'] || '';
+        return { name, address, phone, lat: pos.lat, lon: pos.lon, distance: haversine(lat, lon, pos.lat, pos.lon) };
+      }).filter(Boolean);
+      items.sort((a,b)=>a.distance - b.distance);
+      return items;
+    }catch(e){
+      console.error('fetchOverpassNearby error', e);
+      return [];
+    }
   }
 
   function escapeHtml(s){ return (s+'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[c])); }
