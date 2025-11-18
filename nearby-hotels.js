@@ -149,24 +149,56 @@
   window.NearbyHotels = { init };
 
   // Open Google Maps search for hotels centered on user's current location
-  async function openMapsForHotels(){
+  async function openMapsForHotels(lat, lon, zoom){
+    const z = zoom || 14;
+    const mapsUrl = `https://www.google.com/maps/search/hotels/@${lat},${lon},${z}z`;
+    window.open(mapsUrl, '_blank');
+  }
+
+  // header action: fetch user's location, show in-site modal (Overpass) and open Maps
+  async function headerFindNearbyBoth(){
+    const btn = document.getElementById('findNearbyInline');
+    const radiusSelect = document.getElementById('findNearbyRadius');
+    const radius = radiusSelect ? parseInt(radiusSelect.value,10) : 2000;
+    const zoomMap = radiusToZoom(radius);
     if(!navigator.geolocation){ alert('Geolocation is not supported by your browser.'); return; }
     try{
       const pos = await new Promise((resolve, reject) => navigator.geolocation.getCurrentPosition(resolve, reject, {timeout:15000}));
       const lat = pos.coords.latitude; const lon = pos.coords.longitude;
-      const zoom = 14; // reasonable default
-      const mapsUrl = `https://www.google.com/maps/search/hotels/@${lat},${lon},${zoom}z`;
-      window.open(mapsUrl, '_blank');
+      // show modal results (Overpass or fallback)
+      try{
+        const results = await fetchOverpassNearby(lat, lon, radius);
+        if(results && results.length){
+          renderResults({lat,lon}, results);
+        } else {
+          const list = HOTELS.map(h=>({ ...h, distance: haversine(lat, lon, h.lat, h.lon) }));
+          list.sort((a,b)=>a.distance - b.distance);
+          renderResults({lat,lon}, list);
+        }
+      }catch(e){
+        const list = HOTELS.map(h=>({ ...h, distance: haversine(lat, lon, h.lat, h.lon) }));
+        list.sort((a,b)=>a.distance - b.distance);
+        renderResults({lat,lon}, list);
+      }
+      // open maps centered on user
+      openMapsForHotels(lat, lon, zoomMap);
     }catch(err){
       alert('Unable to get location: '+(err.message || 'permission denied'));
     }
+  }
+
+  function radiusToZoom(radiusMeters){
+    // heuristic: smaller radius -> larger zoom
+    if(radiusMeters <= 1000) return 15;
+    if(radiusMeters <= 2000) return 14;
+    return 13;
   }
 
   // wire optional header button if present
   function wireHeaderButton(){
     const btn = document.getElementById('findNearbyInline');
     if(btn){
-      btn.addEventListener('click', (e)=>{ e.preventDefault(); openMapsForHotels(); });
+      btn.addEventListener('click', (e)=>{ e.preventDefault(); headerFindNearbyBoth(); });
     }
   }
 

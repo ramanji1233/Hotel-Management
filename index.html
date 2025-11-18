@@ -653,7 +653,12 @@
   <header class="hero-header">
     <div class="hero-text">
       <h1>SUPREME HOTEL</h1>
-      <div style="margin-top:8px;">
+      <div style="margin-top:8px;display:flex;gap:8px;align-items:center;justify-content:center">
+        <select id="findNearbyRadius" title="Search radius">
+          <option value="1000">1 km</option>
+          <option value="2000" selected>2 km</option>
+          <option value="5000">5 km</option>
+        </select>
         <button id="findNearbyInline" style="background:#fff;border:1px solid #e0e0e0;padding:6px 10px;border-radius:6px;cursor:pointer">Find Nearby Hotels</button>
       </div>
       <nav>
