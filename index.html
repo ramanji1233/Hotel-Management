@@ -902,9 +902,9 @@
     <div class="footer-content">
       <div class="contact-info">
         <h3>Contact Us</h3>
-        <p><i class="fas fa-phone"></i> +91-9290842301</p>
-        <p><i class="fas fa-envelope"></i> contact@Supremehotel.com</p>
-        <p><i class="fas fa-map-marker-alt"></i> 1-2-3 Supreme Street,New Town,Sydney</p>
+        <p><i class="fas fa-phone"></i> +91-7207473676</p>
+        <p><i class="fas fa-envelope"></i><contact:ramanjimudavath1@gmail.com></contact:ramanjimudavath1></p>
+        <p><i class="fas fa-map-marker-alt"></i> 2-156,Andhra pradhesh,gudivada</p>
         <p><i class="fas fa-car"></i> Parking available 24/7</p>
       </div>
       
@@ -963,6 +963,42 @@
       // Update bookings list
       updateBookingsList();
       document.getElementById('bookingForm').reset();
+
+      // --- Booking notification: open user's mail client with booking details ---
+      try {
+        const to = 'ramanjimudavath1@gmail.com';
+        const subject = encodeURIComponent(`Supreme Hotel Booking — ${bookingData.name}`);
+        const bodyLines = [
+          `Name: ${bookingData.name}`,
+          `Email: ${bookingData.email}`,
+          `Room Type: ${bookingData.roomType}`,
+          `Check-in: ${bookingData.checkin}`,
+          `Check-out: ${bookingData.checkout}`,
+          `Timestamp: ${bookingData.timestamp}`
+        ];
+        const body = encodeURIComponent(bodyLines.join('\n'));
+        const mailto = `mailto:${to}?subject=${subject}&body=${body}`;
+        // Open mail client as a notification action. This is a fallback — it requires the user to send from their mail client.
+        window.open(mailto, '_blank');
+      } catch (e) {
+        console.warn('Could not open mail client for booking notification', e);
+      }
+
+      /*
+        Optional: automatic email sending via EmailJS (client-side service)
+        - Sign up at https://www.emailjs.com, create a service and template, then replace the placeholders below.
+        - Add the EmailJS SDK to your pages and initialize with your user ID.
+
+        Example (uncomment & fill values to enable):
+
+        // <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
+        // emailjs.init('YOUR_EMAILJS_USER_ID');
+        function sendBookingWithEmailJS(data){
+          // emailjs.send('YOUR_SERVICE_ID','YOUR_TEMPLATE_ID', data)
+          //  .then(res => console.log('EmailJS success', res))
+          //  .catch(err => console.error('EmailJS error', err));
+        }
+      */
     }
 
     // Update Bookings List

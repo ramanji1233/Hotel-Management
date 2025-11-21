@@ -109,6 +109,21 @@ python -m http.server 8000
 - The assistant is intentionally local-only and simple. If you want richer natural-language answers, we can integrate a backend + LLM (securely) and add indexing improvements (TF-IDF, embeddings).
 - The legacy Nearby Hotels feature was removed to simplify the UI; if you want a restored in-widget list (without the old header controls), I can add a lightweight list that queries a remote API or a small backend proxy.
 
+## Booking notifications
+
+- When a user submits a booking through the site, a notification action is performed to let you know who booked and the booking details. There are two behaviours available:
+
+  1. Mailto fallback (default): the site opens the visitor's mail client pre-filled with an email to `ramanjimudavath1@gmail.com` containing the booking details. This requires the visitor to send the email manually from their mail client and is compatible with a static site.
+
+  2. Automatic sending via EmailJS (optional): if you want bookings to be emailed automatically without requiring the visitor to send an email, you can configure EmailJS and enable the commented placeholder in `index.html`. Steps:
+     - Create an account at https://www.emailjs.com and add an email service (e.g., Gmail via their recommended setup).
+     - Create an email template and note your `service_id`, `template_id`, and `user_id`.
+     - Add the EmailJS SDK to your pages: `<script src="https://cdn.emailjs.com/dist/email.min.js"></script>` and call `emailjs.init('YOUR_USER_ID')`.
+     - Un-comment the `sendBookingWithEmailJS` block in `index.html` and replace the placeholders with your IDs.
+
+Notes:
+- Client-side automatic email sending exposes no passwords but does rely on the EmailJS service and its quotas. For production systems handling user data, a small backend that sends emails server-side (and logs bookings securely) is recommended.
+
 ---
 Created and maintained by the project team.
 
