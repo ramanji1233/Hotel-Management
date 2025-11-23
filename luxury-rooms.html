@@ -718,6 +718,43 @@
       localStorage.setItem('luxuryRoomBookings', JSON.stringify(bookings));
 
       closeModal();
+      // Show a small notification with a Send-email link so the user can notify manager if desired
+      (function(){
+        const to = 'ramanjimudavath1@gmail.com';
+        const subject = encodeURIComponent(`Luxury Room Booking — ${name}`);
+        const bodyLines = [
+          `Room: ${currentRoom.name}`,
+          `Guest: ${name}`,
+          `Check-in: ${checkIn}`,
+          `Check-out: ${checkOut}`,
+          `Guests: ${guests}`,
+          `Timestamp: ${new Date().toISOString()}`
+        ];
+        const body = encodeURIComponent(bodyLines.join('\n'));
+        const mailtoHref = `mailto:${to}?subject=${subject}&body=${body}`;
+
+        const notify = document.createElement('div');
+        notify.style.position = 'fixed';
+        notify.style.right = '20px';
+        notify.style.bottom = '90px';
+        notify.style.background = '#fff';
+        notify.style.border = '1px solid #eee';
+        notify.style.padding = '12px';
+        notify.style.borderRadius = '8px';
+        notify.style.boxShadow = '0 8px 24px rgba(0,0,0,0.15)';
+        notify.innerHTML = `<div style="font-weight:600;margin-bottom:8px">Booking saved</div>`;
+        const link = document.createElement('a');
+        link.href = mailtoHref; link.target = '_blank'; link.rel='noopener noreferrer';
+        link.textContent = 'Send booking details to manager';
+        link.style.display = 'inline-block'; link.style.padding='8px 10px'; link.style.background='#4c81b3'; link.style.color='#fff'; link.style.borderRadius='6px'; link.style.textDecoration='none';
+        notify.appendChild(link);
+        const close = document.createElement('button');
+        close.textContent = '×'; close.style.marginLeft='8px'; close.style.background='transparent'; close.style.border='none'; close.style.fontSize='16px'; close.style.cursor='pointer';
+        close.addEventListener('click', ()=>{ notify.remove(); });
+        notify.appendChild(close);
+        document.body.appendChild(notify);
+        setTimeout(()=>{ try{ notify.remove(); }catch(e){} }, 20000);
+      })();
       document.querySelector('.booking-form form').reset();
     }
 

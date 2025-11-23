@@ -964,8 +964,8 @@
       updateBookingsList();
       document.getElementById('bookingForm').reset();
 
-      // --- Booking notification: open user's mail client with booking details ---
-      try {
+      // --- Booking notification: provide a visible Send-email button (mailto fallback)
+      (function(){
         const to = 'ramanjimudavath1@gmail.com';
         const subject = encodeURIComponent(`Supreme Hotel Booking — ${bookingData.name}`);
         const bodyLines = [
@@ -977,12 +977,28 @@
           `Timestamp: ${bookingData.timestamp}`
         ];
         const body = encodeURIComponent(bodyLines.join('\n'));
-        const mailto = `mailto:${to}?subject=${subject}&body=${body}`;
-        // Open mail client as a notification action. This is a fallback — it requires the user to send from their mail client.
-        window.open(mailto, '_blank');
-      } catch (e) {
-        console.warn('Could not open mail client for booking notification', e);
-      }
+        const mailtoHref = `mailto:${to}?subject=${subject}&body=${body}`;
+
+        // Create a prominent send link inside the booking-status area so the user can choose when to send
+        const statusEl = document.getElementById('booking-status');
+        if(statusEl){
+          const sendLink = document.createElement('a');
+          sendLink.href = mailtoHref;
+          sendLink.target = '_blank';
+          sendLink.rel = 'noopener noreferrer';
+          sendLink.textContent = 'Send booking details to manager';
+          sendLink.style.display = 'inline-block';
+          sendLink.style.marginTop = '10px';
+          sendLink.style.padding = '8px 12px';
+          sendLink.style.background = '#4c81b3';
+          sendLink.style.color = '#fff';
+          sendLink.style.borderRadius = '6px';
+          sendLink.style.textDecoration = 'none';
+          // Append to the success-message or status area
+          const success = statusEl.querySelector('.success-message');
+          if(success) success.appendChild(sendLink); else statusEl.appendChild(sendLink);
+        }
+      })();
 
       /*
         Optional: automatic email sending via EmailJS (client-side service)
