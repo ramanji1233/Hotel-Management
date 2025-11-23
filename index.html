@@ -33,93 +33,57 @@
       margin-bottom: 1rem;
     }
 
-    nav ul {
-      display: flex;
-      justify-content: center;
-      list-style: none;
-      gap: 1.5rem;
-      flex-wrap: wrap;
-    }
-
-    nav a {
-      color: white;
-      text-decoration: none;
-      font-weight: 600;
-      padding: 0.5rem 1rem;
-      border-radius: 4px;
-      transition: background-color 0.3s;
-    }
-
-    nav a:hover {
-      background-color: rgba(255, 255, 255, 0.2);
-    }
-
-    /* Section Styles */
+    /* Page sections: consistent spacing and centered container */
     .page-section {
-      padding: 3rem 1.5rem;
+      padding: 48px 20px;
       max-width: 1200px;
-      margin: 0 auto;
+      margin: 0 auto 24px auto;
     }
 
-    h2 {
+    /* Section headings */
+    .page-section h2 {
+      font-size: 1.8rem;
+      margin-bottom: 18px;
+      color: #11244d;
       text-align: center;
-      margin-bottom: 2rem;
-      color: #000000;
-      font-size: 2rem;
     }
 
-    /* Facilities Section */
+    /* Facility cards grid */
     .cards {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
-      margin-top: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+      margin-top: 18px;
     }
 
     .card {
       background: white;
       border-radius: 8px;
       overflow: hidden;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s;
+      box-shadow: 0 6px 20px rgba(10,20,40,0.06);
+      text-align: left;
+      transition: transform .18s ease, box-shadow .18s ease;
     }
 
-    .card:hover {
-      transform: translateY(-5px);
-    }
+    .card img { width:100%; height:160px; object-fit:cover; display:block }
+    .card h3 { padding: 12px 14px 0 14px; font-size:1.1rem; color:#0e2546 }
+    .card p { padding: 0 14px 14px 14px; color:#536377; font-size:0.95rem }
 
-    .card img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-    }
+    .card:hover { transform: translateY(-6px); box-shadow: 0 18px 40px rgba(10,20,40,0.12) }
 
-    .card h3 {
-      padding: 1rem 1rem 0.5rem;
-      color: #132172;
-    }
+    /* Header nav links */
+    .hero-header nav ul { gap: 1.1rem }
+    .hero-header nav ul li a { color: #fff; text-decoration: none; padding: 6px 10px; display:inline-block }
+    .hero-header nav ul li a:hover { background: rgba(255,255,255,0.06); border-radius:6px }
 
-    .card p {
-      padding: 0 1rem 1rem;
-      color: #3d3d3d;
-    }
-
-    /* Rooms Section */
-    .filters {
+    nav ul {
       display: flex;
       justify-content: center;
-      gap: 1rem;
-      margin: 1.5rem 0;
-      flex-wrap: wrap;
+      list-style: none;
+      gap: 1.5rem;
     }
 
-    .filters select {
-      padding: 0.5rem 1rem;
-      border-radius: 4px;
-      border: 1px solid #ddd;
-      background: white;
-      cursor: pointer;
-    }
+    /* Booking manager script moved to a separate <script> block to avoid breaking CSS */
 
     .room-cards {
       display: grid;
@@ -632,6 +596,84 @@
 </head>
 <body>
   <a href="login.html">Login</a>
+  <script>
+    // Cleanup: remove accidental visible code blocks containing emailjs or sendBookingWithEmailJS
+    (function cleanupVisibleCode(){
+      try{
+        const keywords = ['emailjs','sendBookingWithEmailJS','YOUR_EMAILJS_USER_ID','EmailJS'];
+        const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+        const toRemove = [];
+        while(walker.nextNode()){
+          const txt = walker.currentNode.nodeValue || '';
+          if(txt.length > 200 && keywords.some(k=>txt.indexOf(k)!==-1)){
+            const parent = walker.currentNode.parentNode;
+            if(parent && parent.tagName && parent.tagName.toLowerCase() !== 'script' && parent.tagName.toLowerCase() !== 'style'){
+              toRemove.push(parent);
+            } else {
+              try{ walker.currentNode.parentNode.removeChild(walker.currentNode); }catch(e){}
+            }
+          }
+        }
+        toRemove.forEach(el=>{ try{ el.remove(); }catch(e){} });
+      }catch(e){ console.warn('cleanupVisibleCode error', e); }
+    })();
+
+    // Booking Manager UI: floating button + modal listing recent bookings with Send mail actions
+    (function bookingManager(){
+      function createButton(){
+        if(document.getElementById('bookingManagerBtn')) return;
+        const btn = document.createElement('button');
+        btn.id = 'bookingManagerBtn';
+        btn.textContent = 'Bookings';
+        Object.assign(btn.style, {position:'fixed', left:'20px', bottom:'20px', zIndex:99999, background:'#162f4e', color:'#fff', border:'none', padding:'10px 14px', borderRadius:'8px', cursor:'pointer', boxShadow:'0 8px 24px rgba(0,0,0,0.2)'});
+        document.body.appendChild(btn);
+        btn.addEventListener('click', toggleModal);
+      }
+
+      function toggleModal(){
+        const m = document.getElementById('bookingManagerModal');
+        if(m) m.classList.toggle('open'); else buildModal();
+      }
+
+      function buildModal(){
+        const modal = document.createElement('div');
+        modal.id = 'bookingManagerModal';
+        Object.assign(modal.style, {position:'fixed', left:'20px', bottom:'70px', width:'360px', maxHeight:'60vh', overflow:'auto', background:'#fff', borderRadius:'8px', boxShadow:'0 12px 40px rgba(0,0,0,0.2)', padding:'12px', zIndex:99999});
+        modal.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><strong>Recent Bookings</strong><button id='bmClose' style='background:none;border:none;font-weight:700;cursor:pointer'>✕</button></div><div id='bmList'>Loading…</div><div style='font-size:12px;color:#666;margin-top:8px'>Click Send to open your mail client (mailto) and notify the manager.</div>`;
+        document.body.appendChild(modal);
+        modal.querySelector('#bmClose').addEventListener('click', ()=>modal.remove());
+        renderList();
+      }
+
+      function renderList(){
+        const listEl = document.getElementById('bmList');
+        if(!listEl) return;
+        const keys = ['roomBookings','luxuryRoomBookings'];
+        const all = [];
+        keys.forEach(k=>{
+          try{ const arr = JSON.parse(localStorage.getItem(k) || '[]'); if(Array.isArray(arr)) all.push(...arr); }catch(e){}
+        });
+        if(!all.length){ listEl.innerHTML = '<div style="color:#666">No recent bookings.</div>'; return; }
+        all.sort((a,b)=> new Date(b.timestamp || b.date || 0) - new Date(a.timestamp || a.date || 0));
+        const items = all.slice(0,10).map((b,i)=>{
+          const name = b.name || b.guest || '';
+          const email = b.email || '';
+          const room = b.roomType || b.room || '';
+          const checkin = b.checkin || b.checkIn || '';
+          const checkout = b.checkout || b.checkOut || '';
+          const ts = b.timestamp || b.date || '';
+          const body = encodeURIComponent([`Name: ${name}`, `Email: ${email}`, `Room: ${room}`, `Check-in: ${checkin}`, `Check-out: ${checkout}`, `Timestamp: ${ts}`].join('\n'));
+          const mailto = `mailto:ramanjimudavath1@gmail.com?subject=${encodeURIComponent('Supreme Hotel Booking — '+name)}&body=${body}`;
+          return `<div style="padding:8px;border-bottom:1px solid #f2f2f2;margin-bottom:6px"><div style='font-weight:600'>${escapeHtml(name)} <span style='color:#666;font-weight:700'>${room}</span></div><div style='font-size:13px;color:#333'>${escapeHtml(checkin)} → ${escapeHtml(checkout)}</div><div style='margin-top:6px'><a href='${mailto}' target='_blank' rel='noopener noreferrer' style='display:inline-block;padding:6px 8px;background:#4c81b3;color:#fff;border-radius:6px;text-decoration:none'>Send</a></div></div>`;
+        }).join('');
+        listEl.innerHTML = items;
+      }
+
+      function escapeHtml(s){ return (s||'')+'' .replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[c])); }
+
+      try{ createButton(); }catch(e){console.warn('bookingManager init error', e);} 
+    })();
+  </script>
   <!-- Shopping Cart Icon -->
   <div class="cart-container">
     <div class="cart-icon" onclick="toggleCart()">
@@ -907,7 +949,7 @@
       <div class="contact-info">
         <h3>Contact Us</h3>
         <p><i class="fas fa-phone"></i> +91-7207473676</p>
-        <p><i class="fas fa-envelope"></i><contact:ramanjimudavath1@gmail.com></contact:ramanjimudavath1></p>
+        <p><i class="fas fa-envelope"></i> <a href="mailto:ramanjimudavath1@gmail.com">ramanjimudavath1@gmail.com</a></p>
         <p><i class="fas fa-map-marker-alt"></i> 2-156,Andhra pradhesh,gudivada</p>
         <p><i class="fas fa-car"></i> Parking available 24/7</p>
       </div>
