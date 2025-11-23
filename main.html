@@ -864,6 +864,10 @@
         <option value="Suite">Executive Suite</option>
         <option value="Supreme">Supreme Room</option>
       </select>
+      <label style="grid-column: span 2; display:flex; align-items:center; gap:8px;">
+        <input type="checkbox" id="sendEmailOpt" />
+        <span style="font-size:13px;color:#333">Send booking email to manager (ramanjimudavath1@gmail.com)</span>
+      </label>
       <button type="submit">Book Now</button>
     </form>
     <div id="booking-status"></div>
@@ -962,39 +966,42 @@
       updateBookingsList();
       document.getElementById('bookingForm').reset();
 
-      // Provide a visible Send-email button (mailto fallback) so user can send booking info
-      (function(){
-        const to = 'ramanjimudavath1@gmail.com';
-        const subject = encodeURIComponent(`Supreme Hotel Booking — ${bookingData.name}`);
-        const bodyLines = [
-          `Name: ${bookingData.name}`,
-          `Email: ${bookingData.email}`,
-          `Room Type: ${bookingData.roomType}`,
-          `Check-in: ${bookingData.checkin}`,
-          `Check-out: ${bookingData.checkout}`,
-          `Timestamp: ${bookingData.timestamp}`
-        ];
-        const body = encodeURIComponent(bodyLines.join('\n'));
-        const mailtoHref = `mailto:${to}?subject=${subject}&body=${body}`;
+      // Provide a visible Send-email button (mailto fallback) so user can send booking info, only when opted-in
+      try{
+        const opt = document.getElementById('sendEmailOpt');
+        if(opt && opt.checked){
+          const to = 'ramanjimudavath1@gmail.com';
+          const subject = encodeURIComponent(`Supreme Hotel Booking — ${bookingData.name}`);
+          const bodyLines = [
+            `Name: ${bookingData.name}`,
+            `Email: ${bookingData.email}`,
+            `Room Type: ${bookingData.roomType}`,
+            `Check-in: ${bookingData.checkin}`,
+            `Check-out: ${bookingData.checkout}`,
+            `Timestamp: ${bookingData.timestamp}`
+          ];
+          const body = encodeURIComponent(bodyLines.join('\n'));
+          const mailtoHref = `mailto:${to}?subject=${subject}&body=${body}`;
 
-        const statusEl = document.getElementById('booking-status');
-        if(statusEl){
-          const sendLink = document.createElement('a');
-          sendLink.href = mailtoHref;
-          sendLink.target = '_blank';
-          sendLink.rel = 'noopener noreferrer';
-          sendLink.textContent = 'Send booking details to manager';
-          sendLink.style.display = 'inline-block';
-          sendLink.style.marginTop = '10px';
-          sendLink.style.padding = '8px 12px';
-          sendLink.style.background = '#4c81b3';
-          sendLink.style.color = '#fff';
-          sendLink.style.borderRadius = '6px';
-          sendLink.style.textDecoration = 'none';
-          const success = statusEl.querySelector('.success-message');
-          if(success) success.appendChild(sendLink); else statusEl.appendChild(sendLink);
+          const statusEl = document.getElementById('booking-status');
+          if(statusEl){
+            const sendLink = document.createElement('a');
+            sendLink.href = mailtoHref;
+            sendLink.target = '_blank';
+            sendLink.rel = 'noopener noreferrer';
+            sendLink.textContent = 'Send booking details to manager';
+            sendLink.style.display = 'inline-block';
+            sendLink.style.marginTop = '10px';
+            sendLink.style.padding = '8px 12px';
+            sendLink.style.background = '#4c81b3';
+            sendLink.style.color = '#fff';
+            sendLink.style.borderRadius = '6px';
+            sendLink.style.textDecoration = 'none';
+            const success = statusEl.querySelector('.success-message');
+            if(success) success.appendChild(sendLink); else statusEl.appendChild(sendLink);
+          }
         }
-      })();
+      }catch(e){console.warn('booking notify opt error', e);} 
     }
 
     // Update Bookings List
